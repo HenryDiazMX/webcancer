@@ -1,0 +1,143 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block title %} Inicio | Ciencia de Datos{% endblock %}
+{% block content %}
+
+    <!-- Content Start -->
+    <div id="main">
+        <!-- Slider Start-->
+        <div class="fullwidthbanner-container">
+            <div class="fullwidthbanner rslider">
+                <ul>
+                    <!-- THE FIRST SLIDE -->
+                    <li data-delay="6000" data-masterspeed="300" data-transition="fade">
+                        <div class="slotholder">
+                            <img id="elemento1" src="{% static 'home/img/slider/slider-bg-1.jpg' %}"
+                                 data-fullwidthcentering="on" alt="Pixma">
+                        </div>
+                        <div class="caption modern_big_bluebg h1 lft tp-caption start"
+                             data-x="40" data-y="85" data-speed="700" data-endspeed="800"
+                             data-start="1000" data-easing="easeOutQuint"
+                             data-endeasing="easeOutQuint">
+                            <h3>bemira</h3>
+                        </div>
+                        <div class="caption list_slide lfb tp-caption start"
+                             data-easing="easeOutExpo" data-start="1400" data-speed="1050"
+                             data-y="180" data-x="40">
+                            <div class="list-slide">
+                                <i class="fa fa-code-fork slide-icon"
+                                   id="elemento2"></i>
+                                <h5 class="dblue" id="elemento3">Infraestructure</h5>
+                            </div>
+                        </div>
+                        <div class="caption list_slide lfb tp-caption start"
+                             data-easing="easeOutExpo" data-start="1800" data-speed="1200"
+                             data-y="220" data-x="40">
+                            <div class="list-slide">
+                                <i class="fa fa-qrcode slide-icon"
+                                   id="elemento4"></i>
+                                <h5 class="dblue" id="elemento5">Software</h5>
+                            </div>
+                        </div>
+                        <div class="caption list_slide lfb tp-caption start"
+                             data-easing="easeOutExpo" data-start="2200" data-speed="1350"
+                             data-y="260" data-x="40">
+                            <div class="list-slide">
+                                <i class="fa fa-laptop slide-icon"
+                                   id="elemento6"></i>
+                                <h5 class="dblue" id="elemento7">Items</h5>
+                            </div>
+                        </div> <!--             <div class="caption lfb caption_button_1 fadeout tp-caption start" -->
+                        <!--                data-x="40" --> <!--                data-y="330" -->
+                        <!--                data-speed="900" --> <!--                data-endspeed="300" -->
+                        <!--                data-start="2700" --> <!--                data-hoffset="-70" -->
+                        <!--                data-easing="easeOutExpo"> -->
+                        <!--                <a class="btn-special hidden-xs btn-grey" href="#">Leer más</a> -->
+                        <!--             </div> -->
+                        <!--             <div class="caption lfb caption_button_2 fadeout tp-caption start" -->
+                        <!--                data-x="210" --> <!--                data-y="330" -->
+                        <!--                data-speed="800" --> <!--                data-endspeed="300" -->
+                        <!--                data-start="2900" --> <!--                data-hoffset="70" -->
+                        <!--                data-easing="easeOutExpo"> -->
+                        <!--                <a class="btn-special hidden-xs btn-color" href="#">Leer más</a> -->
+                        <!--             </div> -->
+                    </li>
+                    <!-- THE RESPONSIVE SLIDE -->
+                    <li data-transition="fade" data-slotamount="1" data-masterspeed="300">
+                        <img id="elemento8" src="{% static 'home/img/slider/slider-bg-2.jpg'%}"
+                             data-fullwidthcentering="on" alt="">
+                        <div class="caption large_text sft" data-x="660" data-y="54"
+                             data-speed="300" data-start="800" data-easing="easeOutExpo">CALIDAD INFORMÁTICA
+                        </div>
+                        <div class="caption large_text sfr" data-x="660" data-y="88"
+                             data-speed="300" data-start="1100" data-easing="easeOutExpo">
+                            <span class="dblue">A TU ALCANCE</span>
+                        </div>
+                        <div class="caption list_slide lfb tp-caption start"
+                             data-easing="easeOutExpo" data-start="1400" data-speed="1050"
+                             data-y="180" data-x="660">
+                            <div class="list-slide">
+                                <i class="fa fa-globe slide-icon"
+                                   id="elemento9"></i>
+                                <h5 id="elemento10">Business Solutions</h5>
+                            </div>
+                        </div>
+                        <div class="caption list_slide lfb tp-caption start"
+                             data-easing="easeOutExpo" data-start="1800" data-speed="1200"
+                             data-y="220" data-x="660">
+                            <div class="list-slide">
+                                <i class="fa fa-gears slide-icon"
+                                   id="elemento11"></i>
+                                <h5 id="elemento12">Software Engineering</h5>
+                            </div>
+                        </div>
+                        <div class="caption list_slide lfb tp-caption start"
+                             data-easing="easeOutExpo" data-start="2200" data-speed="1350"
+                             data-y="260" data-x="660">
+                            <div class="list-slide">
+                                <i class="fa fa-spinner slide-icon"
+                                   id="elemento13"></i>
+                                <h5 id="elemento14">Processes Reengineering</h5>
+                            </div>
+                        </div>
+                        <div class="caption list_slide lfb tp-caption start"
+                             data-easing="easeOutExpo" data-start="2600" data-speed="1350"
+                             data-y="300" data-x="660">
+                            <div class="list-slide">
+                                <i class="fa fa-pie-chart slide-icon"
+                                   id="elemento15"></i>
+                                <h5 id="elemento16">Contract Management</h5>
+                            </div>
+                        </div>
+                        <div class="caption list_slide lfb tp-caption start"
+                             data-easing="easeOutExpo" data-start="3000" data-speed="1350"
+                             data-y="340" data-x="660">
+                            <div class="list-slide">
+                                <i class="fa fa-wrench slide-icon"
+                                   id="elemento17"></i>
+                                <h5 id="elemento18">Support and Maintenance</h5>
+                            </div>
+                        </div>
+                        <div class="caption lfl" data-x="53" data-y="30" data-speed="300"
+                             data-start="1400" data-easing="easeOutExpo">
+                            <img id="elemento19" src="{% static 'home/img/slider/responsive-imac.png'%}"
+                                 alt="iMac Responsive">
+                        </div>
+                        <div class="caption lfl" data-x="323" data-y="145" data-speed="300"
+                             data-start="1500" data-easing="easeOutExpo">
+                            <img id="elemento20" src="{% static 'home/img/slider/responsive-ipad.png'%}"
+                                 alt="iPad Responsive">
+                        </div>
+                        <div class="caption lfl" data-x="472" data-y="253" data-speed="300"
+                             data-start="1600" data-easing="easeOutExpo">
+                            <img id="elemento21" src="{% static 'home/img/slider/responsive-iphone.png'%}"
+                                 alt="iPhone Responsive">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    <!-- Slider End-->
+    </div>
+    <!-- Content End -->
+{% endblock %}

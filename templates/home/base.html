@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>
+<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->
+<html> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %} {% endblock %} </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta name="description" content="Ciencia de Datos - Bemira">
+    <meta name="author" content="FIFOTHEMES.COM">
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts  -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
+    <!-- Library CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'home/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/bootstrap-theme.css' %} ">
+    <link rel="stylesheet" href="{% static 'home/css/fonts/font-awesome/css/font-awesome.css' %} ">
+    <link rel="stylesheet" href="{% static 'home/css/animations.css' %} " media="screen">
+    <link rel="stylesheet" href="{% static 'home/css/superfish.css' %} " media="screen">
+    <link rel="stylesheet" href="{% static 'home/css/prettyPhoto.css' %} " media="screen">
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="{% static 'home/css/style.css' %} ">
+    <!-- Skin -->
+    <link rel="stylesheet" href="{% static 'home/css/colors/blue.css' %} " class="colors">
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="{% static 'home/css/theme-responsive.css' %} ">
+    <!-- Switcher CSS -->
+
+    <!-- Favicons -->
+    <link rel="shortcut icon" href="{% static 'home/img/ico/favicon.ico' %} ">
+    <link rel="apple-touch-icon" href="{% static 'home/img/ico/apple-touch-icon.png' %} ">
+    <link rel="apple-touch-icon" sizes="72x72" href="{% static 'home/img/ico/apple-touch-icon-72.png' %} ">
+    <link rel="apple-touch-icon" sizes="114x114" href="{% static 'home/img/ico/apple-touch-icon-114.png' %} ">
+    <link rel="apple-touch-icon" sizes="144x144" href="{% static 'home/img/ico/apple-touch-icon-144.png' %} ">
+
+    <script src="{% static 'home/js/jquery.min.js' %} "></script>
+    <script src="{% static 'home/js/bootstrap.js' %} "></script>
+    <script src="{% static 'home/js/jquery.parallax.js' %} "></script>
+    <script src="{% static 'home/js/jquery.wait.js' %} "></script>
+    <script src="{% static 'home/js/modernizr-2.6.2.min.js' %} "></script>
+    <script src="{% static 'home/js/revolution-slider/js/jquery.themepunch.revolution.min.js' %} "></script>
+    <script src="{% static 'home/js/jquery.nivo.slider.pack.js' %} "></script>
+    <script src="{% static 'home/js/jquery.prettyPhoto.js' %} "></script>
+    <script src="{% static 'home/js/superfish.js' %} "></script>
+    <script src="{% static 'home/js/tweetMachine.js' %} "></script>
+    <script src="{% static 'home/js/tytabs.js' %} "></script>
+    <script src="{% static 'home/js/jquery.sticky.js' %} "></script>
+    <script src="{% static 'home/js/jflickrfeed.js' %} "></script>
+    <script src="{% static 'home/js/imagesloaded.pkgd.min.js' %} "></script>
+    <script src="{% static 'home/js/waypoints.min.js' %} "></script>
+    <script src="{% static 'home/js/jquery.gmap.min.js' %} "></script>
+    <script src="{% static 'home/js/custom.js' %} "></script>
+    <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+       <script src="{% static 'home/js/respond.min.js' %} "></script>
+       <![endif]-->
+    <!--[if IE]>
+       <link rel="stylesheet" href="{% static 'home/css/ie.css' %} ">
+       <![endif]-->
+    <style>
+        #main {
+            background: #fff;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: #ae0000;
+        }
+
+        body, .breadcrumbs ul li, .breadcrumbs ul li a, .remodalForm {
+            color: #9e9e9e;
+        }
+
+        .breadcrumb-wrapper {
+            background: #FAFAFA;
+        }
+
+        #header .main-header, .footer-bottom {
+            background: #ae0000;
+        }
+
+        .menu ul li a:hover, .menu ul > li:hover > a {
+            border-bottom: 3px solid #ae0000;
+            background-color: #ae1111;
+        }
+
+        .menu ul ul {
+            border-top: 3px solid #ae0000;
+            background-color: #92999F;
+        }
+
+        .menu ul ul li a:hover {
+            background-color: #515151;
+        }
+
+        .menu ul > li > a {
+            color: #fff;
+        }
+
+        header .top-bar, .footer-top {
+            background: #92999f;
+            color: #ffffff
+        }
+
+        header .top-bar strong, .footer-top strong, #footer h1, #footer h2,
+        #footer h3, #footer h4, #footer h5, #footer h6, .iconoNotificacion {
+            color: #3f4f7a;
+        }
+
+        .tp-caption .slide-icon {
+            background: #ae0000;
+        }
+
+        .imgLogo {
+            background-color: #ae0000;
+            padding: 5px;
+            border-radius: 4px;
+            max-height: 60px;
+            max-width: 125px;
+        }
+    </style>
+</head>
+<body class="page">
+<div class="page-mask">
+    <div class="page-loader">
+
+        <div class="spinner"></div>
+        Loading...
+    </div>
+
+</div>
+<div class="wrap">
+    <!-- Header Start -->
+    <header id="header">
+        <!-- Header Top Bar Start -->
+        <!-- Header Top Bar End -->
+        <!-- Main Header Start -->
+        <div class="main-header">
+            <div class="container">
+                <!-- TopNav Start -->
+                <!-- TopNav End -->
+                <!-- Logo Start -->
+                <div class="logo pull-left">
+                    <h1>
+                        <a href="{% url 'home' %}">
+                            <img id="imgLogo" src="{% static 'home/img/logo.png' %}" alt="Logo" class="imgLogo"
+                                 style="background-color: white">
+                        </a>
+                    </h1>
+                </div>
+                <!-- Logo End -->
+                <!-- Mobile Menu Start -->
+                <div class="mobile navbar-header">
+                    <a class="navbar-toggle" data-toggle="collapse" href=".navbar-collapse">
+                        <i class="fa fa-bars fa-2x"></i>
+                    </a>
+                </div>
+                <!-- Mobile Menu End -->
+                <!-- Menu Start -->
+                <nav class="collapse navbar-collapse menu">
+                    <ul class="nav navbar-nav sf-menu">
+                        <li>
+                            <a href="#">
+                                COVID-19
+                                <span class="sf-sub-indicator">
+                           <i class="fa fa-angle-down "></i>
+                           </span>
+                            </a>
+                            <ul>
+                                <li>
+                                    <a href="#" class="sf-with-ul">
+                                        Graficas
+                                        <span class="sf-sub-indicator pull-right">
+                                 <i class="fa fa-angle-right "></i>
+                                 </span>
+                                    </a>
+                                    <ul>
+                                        <li><a href="#" class="sf-with-ul">Gráficas de Sobrevivencia</a></li>
+                                        <li><a href="#" class="sf-with-ul">Árbol de Decisión</a></li>
+                                        <li><a href="#" class="sf-with-ul">Estadísticas</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#" class="sf-with-ul">Listas</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" class="sf-with-ul">
+                                Cáncer Infantil
+                                <span class="sf-sub-indicator">
+                           <i class="fa fa-angle-down "></i>
+                           </span>
+                            </a>
+                            <ul>
+                                <li><a href="{% url 'mapascancer' %}" class="sf-with-ul">Mapas</a></li>
+                                <li><a href="{% url 'graficascancer' %}" class="sf-with-ul">Graficas</a></li>
+                                <li><a href="{% url 'listascancer' %}" class="sf-with-ul">Listas</a></li>
+
+                            </ul>
+                        </li>
+                        <li><a href="#">
+                            Contacto
+                            <span class="sf-sub-indicator">
+                            </span>
+                        </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- Menu End -->
+            </div>
+        </div>
+        <!-- Main Header End -->
+    </header>
+    <!-- Header End -->
+    <!-- Content Start -->
+    {% block content %} {% endblock %}
+    <!-- Content End -->
+    <!-- Footer Start -->
+    <footer id="footer">
+        <!-- Footer Top Start -->
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+                    <section class="col-lg-4 col-md-4 col-xs-12 col-sm-4 footer-one">
+
+                    </section>
+                    <section class="col-lg-4 col-md-4 col-xs-12 col-sm-4 footer-two">
+
+                    </section>
+                    <section class="col-lg-4 col-md-4 col-xs-12 col-sm-4 footer-three">
+                        <h3>Contacto</h3>
+                        <ul class="contact-us">
+                            <li>
+                                <i class="fa fa-map-marker"></i>
+                                <p>
+                                    <strong class="contact-pad">Dirección:</strong> BOULEVARD DE LAS NACIONES, 1707,
+                                    COL. PLAYA DIAMANTE, 39897, GUERRERO, MÉXICO
+                                </p>
+                            </li>
+                            <li>
+                                <i class="fa fa-phone"></i>
+                                <p><strong>Teléfono:</strong> (744) 4867677</p>
+                            </li>
+                            <li>
+                                <i class="fa fa-envelope"></i>
+                                <p><strong>Correo:</strong><a href="mailto:contacto@bemira.com">contacto@bemira.com</a>
+                                </p>
+                            </li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <!-- Footer Top End -->
+        <!-- Footer Bottom Start -->
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6 "> © Copyright 2022 by <a
+                            href="https://www.bemira.com" target="_blank" style="color: white;cursor: pointer;">
+                        Bemira</a>. Todos los derechos reservados.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer Bottom End -->
+    </footer>
+    <!-- Scroll To Top -->
+    <a href="#" class="scrollup"><i class="fa fa-angle-up"></i></a>
+</div>
+<!-- Wrap End -->
+
+<!-- The Scripts -->
+
+</body>
+</html>
