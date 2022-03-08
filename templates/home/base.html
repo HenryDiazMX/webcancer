@@ -6,18 +6,18 @@
 <!--[if gt IE 9]><!-->
 <html> <!--<![endif]-->
 <head>
+    {% load static %}
     <meta charset="utf-8">
     <title>{% block title %} {% endblock %} </title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <meta name="description" content="Ciencia de Datos - Bemira">
-    <meta name="author" content="FIFOTHEMES.COM">
+    <meta name="author" content="Henry Diaz">
     <!-- Mobile Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Google Fonts  -->
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet' href="{%  static 'home/css/fontOswald.css' %}"  >
+    <link rel='stylesheet' href="{%  static 'home/css/fonts.css' %}"  >
     <!-- Library CSS -->
-    {% load static %}
     <link rel="stylesheet" href="{% static 'home/css/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'home/css/bootstrap-theme.css' %} ">
     <link rel="stylesheet" href="{% static 'home/css/fonts/font-awesome/css/font-awesome.css' %} ">

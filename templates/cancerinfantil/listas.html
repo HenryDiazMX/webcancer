@@ -4,6 +4,37 @@
 {% block content %}
 <!-- Content Start -->
 {% csrf_token %}
+    <head>
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+            $("#frmEstado").change(function () {
+
+                $("#frmEstado option:selected").each(function () {
+
+                    idEstado = $(this).val();
+
+                    $.post("/CancerInfantil/Municipio", {idEstado: idEstado}, function (data) {
+                        $("#frmMunicipio").html(data);
+                        //alert(data);
+                    });
+                });
+            });
+            $("#frmMunicipio").change(function () {
+
+                $("#frmMunicipio option:selected").each(function () {
+
+                    idMunicipio = $(this).val();
+
+                    $.post("/CancerInfantil/Localidad", {idMunicipio: idMunicipio}, function (data) {
+                        $("#frmLocalidad").html(data);
+                        //alert(data);
+                    });
+                });
+            });
+            });
+        </script>
+    </head>
 <div id="main">
     <!-- Title, Breadcrumb Start-->
     <div class="breadcrumb-wrapper">
@@ -27,8 +58,8 @@
     </div>
     <!-- Title, Breadcrumb End-->
     <!-- Main Content start-->
-    <form method="post" name="frmConsultarListas" class="form-horizontal" action="/Generate/" target="_blank"
-        id="frmConsultarListas">
+    <form method="post" name="frmConsultarListas" class="form-horizontal" action="{% url 'generarlista' %}"
+        id="frmConsultarListas"> {% csrf_token %}
         <div id="content">
             <div id="content" class="container">
                 <div class="row">
@@ -43,7 +74,7 @@
                                  <select name="frmEstado" id="frmEstado" class="form-control" >
                                     <option value="TODOS">TODOS</option>
                                     {% for estados in estados %}
-                                    <option >{{ estados.ent_resid.upper}}</option>
+                                    <option value="{{ estados.ent_resid}}" >{{ estados.ent_resid.upper}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -53,10 +84,10 @@
                                 <label for="frmMunicipio">Municipio:</label>
                             </div>
                             <div class="col-sm-6">
-                                <select name="frmMunicipio" id="frmMunicipio" class="form-control" disabled>
+                                <select name="frmMunicipio" id="frmMunicipio" class="form-control" >
                                     <option value="TODOS">TODOS</option>
                                     {% for municipios in municipios %}
-                                    <option >{{ municipios.mun_resid.upper}}</option>
+                                    <option value='{{ municipios.mun_resid}}' >{{ municipios.mun_resid.upper}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -66,10 +97,10 @@
                                 <label for="frmLocalidad">Localidad:</label>
                             </div>
                             <div class="col-sm-6">
-                                <select name="frmLocalidad" class="form-control" id="frmLocalidad" disabled>
+                                <select name="frmLocalidad" class="form-control" id="frmLocalidad" >
                                     <option value="TODOS">TODOS</option>
                                     {% for localidades in municipio %}
-                                    <option >{{ localidades.loc_resid.upper}}</option>
+                                    <option value='{{ localidades.loc_resid}}'>{{ localidades.loc_resid.upper}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -83,7 +114,7 @@
                                 <select name="frmRegistro" class="form-control" id="frmRegistro">
                                     <option value="TODOS">TODOS</option>
                                     {% for años in años %}
-                                    <option >{{ años.anio_regis}}</option>
+                                    <option value='{{ años.anio_regis}}'>{{ años.anio_regis}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -97,7 +128,7 @@
                                 <select name="frmCancer" class="form-control" id="frmCancer">
                                     <option value="TODOS">TODOS</option>
                                     {% for tipoCancer in cancer %}
-                                    <option >{{ tipoCancer.lista_mex.upper}}</option>
+                                    <option value="{{ tipoCancer.lista_mex.upper}}">{{ tipoCancer.lista_mex.upper}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -111,7 +142,7 @@
                                 <select name="frmGenero" class="form-control" id="frmGenero">
                                     <option value="TODOS">TODOS</option>
                                     {% for genero in genero %}
-                                    <option >{{ genero.sexo.upper}}</option>
+                                    <option value="{{ genero.sexo.upper}}" >{{ genero.sexo.upper}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -135,7 +166,7 @@
                             <div class="col-sm-7"></div>
                             <div class="col-sm-1">
                                 <a href="{% url 'generarlista' %}">
-                                    <input name="btnReporte" id="btnReporte" type="button" title="Consultar"
+                                    <input name="btnConsultar" id="btnReporte" type="submit" title="Consultar"
                                         class="btn&#x20;btn-primary" value="Consultar">
                                 </a>
                             </div>

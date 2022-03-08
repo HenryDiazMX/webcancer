@@ -9,9 +9,7 @@ from django.http import HttpResponse
 
 from .forms import *
 from .models import *
-
-datos = guerrero.objects.all().values()
-df = pd.DataFrame(datos)
+from django.views.decorators.csrf import csrf_exempt
 
 
 # Create your views here.
@@ -26,6 +24,29 @@ def listascancer(request):
     return render(request, "cancerinfantil/listas.html",
                   {"estados": estados, "municipios": municipios, "localidades": localidades, "años": años,
                    "cancer": tipoCancer, "genero": genero})
+
+
+@csrf_exempt
+def municipio(request):
+    global tag, listaMunicipio, municipios, datos, idEstado, listaMunicipios
+    if request.method == 'POST':
+        idEstado = request.POST['idEstado']
+        municipios = republica.objects.order_by('mun_resid').all().distinct('mun_resid').filter(ent_resid= idEstado )
+        listaMunicipios = "<option value='TODOS'>TODOS</option>"
+        for municipio in municipios:
+            listaMunicipios = listaMunicipios + "<option value = '" + municipio.mun_resid + "'>" + municipio.mun_resid + "</option>"
+    return HttpResponse(listaMunicipios)
+
+@csrf_exempt
+def localidad(request):
+    global listaLocalidades
+    if request.method == 'POST':
+        idMunicipio = request.POST['idMunicipio']
+        localidades = republica.objects.order_by('loc_resid').all().distinct('loc_resid').filter(mun_resid= idMunicipio )
+        listaLocalidades = "<option value='TODOS'>TODOS</option>"
+        for localidad in localidades:
+            listaLocalidades = listaLocalidades + "<option value = '" + localidad.loc_resid + "'>" + localidad.loc_resid + "</option>"
+    return HttpResponse(listaLocalidades)
 
 
 def mapascancer(request):
@@ -52,8 +73,8 @@ def mapascancer(request):
         datos2.loc[i, 'longitud_ocurr'] = df.loc[i, 'longitud_ocurr']
         datos2.loc[i, 'latitud_ocurr'] = df.loc[i, 'latitud_ocurr']
 
-    map = folium.Map(location=[datos2.latitud_ocurr.mean(), datos2.longitud_ocurr.mean()], zoom_start=5,
-                     control_scale=True)
+    map = folium.Map(location=[datos2.latitud_ocurr.mean(), datos2.longitud_ocurr.mean()], zoom_start=8,
+                     control_scale=False, min_zoom=5)
 
     for index, location_info in datos2.iterrows():
         folium.Marker([location_info["latitud_ocurr"], location_info["longitud_ocurr"]],
@@ -72,6 +93,8 @@ def mapascancer(request):
 
 
 def graficascancer(request):
+    datos = guerrero.objects.all().values()
+    df = pd.DataFrame(datos)
     datos = republica.objects.all()
 
     estado = datos.filter()
@@ -103,28 +126,31 @@ def graficascancer(request):
 
 
 def export_csv(request):
-    # query
-    queryset = guerrero.objects.all()
+    if request.method == 'POST':
+        # query
+        queryset = republica.objects.filter(ent_resid=request.POST['frmEstado'])
 
-    # get fields of model
-    options = guerrero._meta
-    fields = [field.name for field in options.fields]
+        # get fields of model
+        options = republica._meta
+        fields = [field.name for field in options.fields]
 
-    # build response
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'atachment; fieldname="CancerInfantil.csv"'
-    # writer
-    writer = csv.writer(response)
-    # writer header
-    writer.writerow([options.get_field(field).verbose_name for field in fields])
-    # writing data
-    for obj in queryset:
-        writer.writerow([getattr(obj, field) for field in fields])
+        # build response
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'atachment; fieldname="CancerInfantil.csv"'
+        # writer
+        writer = csv.writer(response)
+        # writer header
+        writer.writerow([options.get_field(field).verbose_name for field in fields])
+        # writing data
+        for obj in queryset:
+            writer.writerow([getattr(obj, field) for field in fields])
 
     return response
 
 
 def generarkml(request):
+    datos = guerrero.objects.all().values()
+    df = pd.DataFrame(datos)
     datos1 = df
     datos2 = pd.DataFrame()
     for i in range(0, len(datos1)):

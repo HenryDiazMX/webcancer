@@ -25,5 +25,7 @@ urlpatterns = [
     path('CancerInfantil/Graficas', cancer_views.graficascancer, name="graficascancer"),
     path('admin/', admin.site.urls),
     path('CancerInfantil/Listas/Generate', cancer_views.export_csv, name="generarlista"),
-    path('CancerInfantil/Mapas/Generate', cancer_views.generarkml, name="generarKML")
+    path('CancerInfantil/Mapas/Generate', cancer_views.generarkml, name="generarKML"),
+    path('CancerInfantil/Municipio', cancer_views.municipio, name="muncipio"),
+    path('CancerInfantil/Localidad', cancer_views.localidad, name="localidad")
 ]
