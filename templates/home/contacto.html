@@ -1,0 +1,91 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block title %} Contacto | Ciencia De Datos{% endblock %}
+{% block content %}
+<div id="main">
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+                    <h2 class="title">Contacto</h2>
+                </div>
+                <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+                    <div class="breadcrumbs pull-right">
+                        <ul>
+                            <li></li>
+                            <li><a href="{% url 'home' %}">Inicio</a></li>
+                            <li><a href="#">Contacto</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Title, Breadcrumb End-->
+    <form method="post" name="frmContacto" class="form-horizontal"
+          action="{% url 'contacto' %}" id="frmContacto">{% csrf_token %}
+        <div id="content" class="container">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class='col-md-6'>
+                    <h2>Déjanos un mensaje:</h2>
+                    <div class="form-group">
+                        <div class="col-sm-6 control-label">
+                            <label for="Nombre">Nombre:</label></div>
+                        <div class="col-sm-6">
+                            <input type="text" name="Nombre" id="Nombre" class="form-control"
+                                   placeholder="Escriba su Nombre" required >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6 control-label">
+                            <label for="ApellidoP">Apellido Paterno:</label></div>
+                        <div class="col-sm-6">
+                            <input type="text" name="ApellidoP" id="ApellidoP" class="form-control"
+                                   placeholder="Escriba su Apellido Paterno" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6 control-label">
+                            <label for="ApellidoM">Apellido Materno:</label></div>
+                        <div class="col-sm-6">
+                            <input type="text" name="ApellidoM" id="ApellidoM" class="form-control"
+                                   placeholder="Escriba su Apellido Materno" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6 control-label">
+                            <label for="Correo">Correo Electronico:</label></div>
+                        <div class="col-sm-6">
+                            <input type="email" name="Correo" id="Correo" class="form-control"
+                                   placeholder="Escriba su Correo Electronico" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6 control-label">
+                            <label for="Mensaje">Mensaje:</label></div>
+                        <div class="col-sm-6">
+                            <textarea name="Mensaje" id="Mensaje" class="form-control" placeholder="Escriba su Mensaje"
+                                      rows="8" maxlength="1000" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-7"></div>
+                        <div class="col-sm-1">
+                            <a href="#">
+                                <input name="btnEnviar" id="btnEnviar" type="submit" title="Enviar"
+                                       class="btn&#x20;btn-primary" value="Enviar"> </a>
+                        </div>
+                        <div class="col-sm-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

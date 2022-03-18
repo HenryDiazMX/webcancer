@@ -4,37 +4,6 @@
 {% block content %}
 <!-- Content Start -->
 {% csrf_token %}
-    <head>
-        <script type="text/javascript">
-            $(document).ready(function () {
-
-            $("#frmEstado").change(function () {
-
-                $("#frmEstado option:selected").each(function () {
-
-                    idEstado = $(this).val();
-
-                    $.post("/CancerInfantil/Municipio", {idEstado: idEstado}, function (data) {
-                        $("#frmMunicipio").html(data);
-                        //alert(data);
-                    });
-                });
-            });
-            $("#frmMunicipio").change(function () {
-
-                $("#frmMunicipio option:selected").each(function () {
-
-                    idMunicipio = $(this).val();
-
-                    $.post("/CancerInfantil/Localidad", {idMunicipio: idMunicipio}, function (data) {
-                        $("#frmLocalidad").html(data);
-                        //alert(data);
-                    });
-                });
-            });
-            });
-        </script>
-    </head>
 <div id="main">
     <!-- Title, Breadcrumb Start-->
     <div class="breadcrumb-wrapper">
@@ -48,7 +17,7 @@
                         <ul>
                             <li></li>
                             <li><a href="{% url 'home' %}">Inicio</a></li>
-                            <li>Covid</li>
+                            <li>Cáncer Infantil</li>
                             <li>Listas</li>
                         </ul>
                     </div>
@@ -84,7 +53,7 @@
                                 <label for="frmMunicipio">Municipio:</label>
                             </div>
                             <div class="col-sm-6">
-                                <select name="frmMunicipio" id="frmMunicipio" class="form-control" >
+                                <select name="frmMunicipio" id="frmMunicipio" class="form-control" disabled >
                                     <option value="TODOS">TODOS</option>
                                     {% for municipios in municipios %}
                                     <option value='{{ municipios.mun_resid}}' >{{ municipios.mun_resid.upper}}</option>
@@ -97,10 +66,23 @@
                                 <label for="frmLocalidad">Localidad:</label>
                             </div>
                             <div class="col-sm-6">
-                                <select name="frmLocalidad" class="form-control" id="frmLocalidad" >
+                                <select name="frmLocalidad" class="form-control" id="frmLocalidad" disabled >
                                     <option value="TODOS">TODOS</option>
                                     {% for localidades in municipio %}
                                     <option value='{{ localidades.loc_resid}}'>{{ localidades.loc_resid.upper}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-6 control-label">
+                                <label for="frmRangoEdad">Rango de Edades:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <select name="frmRangoEdad" class="form-control" id="frmRangoEdad" >
+                                    <option value="TODOS">TODOS</option>
+                                    {% for agruedad in agruedad %}
+                                    <option value="{{ agruedad.agru_edad}}">{{ agruedad.agru_edad.upper}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -147,21 +129,18 @@
                                 </select>
                             </div>
                         </div>
-
-
                         <div class="form-group">
                             <div class="col-sm-6 control-label">
-                                <label for="frmIdFormato">Archivo:</label>
+                                <label for="frmFormato">Formato:</label>
                             </div>
                             <div class="col-sm-6">
-                                <select name="frmIdFormato" id="frmIdFormato" class="form-control" required="required">
-                                    <option value="">SELECCIONE UNA OPCIÓN</option>
-                                    <option value="excel">EXCEL</option>
-                                    <option value="pdf">CSV</option>
+                                <select name="frmFormato" id="frmFormato" class="form-control" required="required">
+                                    <option value="" DISABLED SELECTED>SELECCIONE UNA OPCIÓN</option>
+                                    <option value="EXCEL">EXCEL</option>
+                                    <option value="CSV">CSV</option>
                                 </select>
                             </div>
                         </div>
-
                         <div class="form-group">
                             <div class="col-sm-7"></div>
                             <div class="col-sm-1">
@@ -178,6 +157,9 @@
         </div>
     </form>
 </div>
+    <div>
+
+    </div>
 <!-- Main Content end-->
 <!-- Content End -->
 {% endblock %}

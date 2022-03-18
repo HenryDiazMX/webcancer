@@ -27,6 +27,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'henrydcmaster@gmail.com'
+EMAIL_HOST_PASSWORD = 'xknsldhkvdoiotoc'
+EMAIL_PORT = 587
 
 # Application definition
 
@@ -79,10 +85,10 @@ WSGI_APPLICATION = 'webcancer.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cancerinfantil',
+        'NAME': 'cienciadatos',
         'USER': 'postgres',
-        'PASSWORD': 'Bmx_2022*',
-        'HOST': 'cancerinfantil.cgokxst98a1u.us-east-1.rds.amazonaws.com',
+        'PASSWORD': '1234',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }

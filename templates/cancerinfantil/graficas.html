@@ -1,0 +1,114 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block title %} Gráficas | Cáncer Infantil{% endblock %}
+{% block content %}
+    <!-- Content Start -->
+    <div id="main">
+        <!-- Title, Breadcrumb Start-->
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+                        <h2 class="title">Graficas</h2>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+                        <div class="breadcrumbs pull-right">
+                            <ul>
+                                <li></li>
+                                <li><a href="{% url 'home' %}">Inicio</a></li>
+                                <li>Cáncer Infantil</li>
+                                <li>Gráficas</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Title, Breadcrumb End-->
+        <!-- Main Content start-->
+     <form method="post" name="frmFiltroGrafica" class="form-horizontal" action="{% url 'graficascancer' %}"
+        id="frmFiltroGrafica"> {% csrf_token %}
+        <div id="content" class="container">
+            <h2>Consultar:</h2>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="col-sm-3">
+                        <div>
+                            <label>Estado:</label>
+                        </div>
+                        <div>
+                            <select class="form form-control" name="frmEstado"
+                                    id="frmEstado">
+                                    <option value="TODOS">TODOS</option>
+                                {% for estados in republica %}
+                                    <option value="{{ estados.ent_resid}}" >{{ estados.ent_resid.upper}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div>
+                            <label>Tipo de Grafica:</label>
+                        </div>
+                        <div>
+                            <select class="form form-control" name="frmTipo"
+                                    id="frmTipo">
+                                <option selected value="DOMINANTE">CANCER DOMINANTES</option>
+                                <option value="OCURRENCIA">SITIO DE OCURRENCIA</option>
+                                <option value="AREA">TIPO DE ÁREA</option>
+                                <option value="GENERO">GENERO</option>
+                                <option value="EDAD">EDAD</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div>
+                            <label>Año:</label>
+                        </div>
+                        <div>
+                            <select class="form form-control" name="frmAño"
+                                    id="frmAño">
+                                <option selected value="TODOS">TODOS</option>
+                                {% for años in año %}
+                                    <option >{{ años.anio_regis}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div>
+                            <label>Rango de Edades:</label>
+                        </div>
+                        <div>
+                            <select class="form form-control" name="frmRangoEdad"
+                                    id="frmRangoEdad">
+                                <option selected value="TODOS">TODOS</option>
+                                {% for agruedad in agruedad %}
+                                    <option value="{{ agruedad.agru_edad}}">{{ agruedad.agru_edad.upper}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 text-center"
+                         style="padding-top: 2em; padding-bottom: 2em;">
+                        <a href=#>
+                            <input name="btnConsultar" id="btnConsultar" type="submit" title="Consultar"
+                                         class="btn&#x20;btn-primary"
+                                         value="Consultar"> </a>
+                    </div>
+                </div>
+            <div id="grafica" class="container">
+                <h2>{{ texto }}</h2>
+                {{ fig | safe }}
+            </div>
+            </div>
+        </div>
+     </form>
+    </div>
+    <div>
+
+    </div>
+
+    <!-- Main Content end-->
+    <!-- Content End -->
+{% endblock %}

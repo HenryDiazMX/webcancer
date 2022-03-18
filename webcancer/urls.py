@@ -20,12 +20,17 @@ from cancerinfantil import views as cancer_views
 
 urlpatterns = [
     path('', home_views.home, name="home"),
+    path('admin/', admin.site.urls),
     path('CancerInfantil/Listas', cancer_views.listascancer, name="listascancer"),
     path('CancerInfantil/Mapas', cancer_views.mapascancer, name="mapascancer"),
     path('CancerInfantil/Graficas', cancer_views.graficascancer, name="graficascancer"),
-    path('admin/', admin.site.urls),
     path('CancerInfantil/Listas/Generate', cancer_views.export_csv, name="generarlista"),
-    path('CancerInfantil/Mapas/Generate', cancer_views.generarkml, name="generarKML"),
+    path('Contacto/', home_views.contacto, name="contacto"),
+
+    ##Funciones que realizan operaciones en conjunto con JS
     path('CancerInfantil/Municipio', cancer_views.municipio, name="muncipio"),
-    path('CancerInfantil/Localidad', cancer_views.localidad, name="localidad")
+    path('CancerInfantil/Localidad', cancer_views.localidad, name="localidad"),
+
+
+
 ]

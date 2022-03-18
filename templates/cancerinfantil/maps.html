@@ -3,6 +3,15 @@
 {% block title %} Mapas | Cáncer Infantil{% endblock %}
 {% block content %}
     <!-- Content Start -->
+    <head>
+    <script type="text/javascript">
+    function showDiv1() {
+      document.getElementById("divesconder").style.visibility = "hidden";
+    }
+    setTimeout("showDiv1()", 10000); // after 15 sec
+
+   </script>
+    </head>
     <div id="main">
         <!-- Title, Breadcrumb Start-->
         <div class="breadcrumb-wrapper">
@@ -15,8 +24,8 @@
                         <div class="breadcrumbs pull-right">
                             <ul>
                                 <li></li>
-                                <li><a href="#">Inicio</a></li>
-                                <li><a href="#">Covid</a></li>
+                                <li><a href="{% url 'home' %}">Inicio</a></li>
+                                <li>Cáncer Infantil</li>
                                 <li>Mapas</li>
                             </ul>
                         </div>
@@ -26,8 +35,11 @@
         </div>
         <!-- Title, Breadcrumb End-->
         <!-- Main Content start-->
+    <form method="post" name="frmFiltroMapa" class="form-horizontal" action="{% url 'mapascancer' %}"
+        id="frmFiltroMapa"> {% csrf_token %}
         <div id="content" class="container">
-            <h2>Consultar:</h2>
+        <div></div>
+        <div><h2>Consultar:</h2></div>
             <div class="row">
                 <div class="col-sm-12">
                     <div class="col-sm-3">
@@ -35,38 +47,27 @@
                             <label>Estado:</label>
                         </div>
                         <div>
-                            <select class="form form-control" name="frmTipoServicio"
-                                    id="frmTipoServicio">
-                                <option selected value="1">TODOS</option>
-                                {% for estados in republica %}
-                                    <option >{{ estados.ent_resid.upper}}</option>
-                                {% endfor %}
+                            <select class="form form-control" name="frmEstado"
+                                    id="frmEstado" required="required">
+                                    <option value="" selected disabled>SELECCIONE UN ESTADO</option>
+                                    {% for estados in republica %}
+                                    <option value="{{ estados.ent_resid }}" >{{ estados.ent_resid.upper}}</option>
+                                    {% endfor %}
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-3">
-                        <div>
-                            <label>Tipo de Registro:</label>
-                        </div>
-                        <div>
-                            <select class="form form-control" name="frmTipoServicio"
-                                    id="frmTipoServicio">
-                                <option selected value="1">RESIDENCIA</option>
-                                <option value="2">OCURRENCIA</option>
-                            </select>
-                        </div>
-                    </div>
+
                     <div class="col-sm-3">
                         <div>
                             <label>Municipio:</label>
                         </div>
                         <div>
-                            <select class="form form-control" name="frmTipoServicio"
-                                    id="frmTipoServicio" disabled>
-                                <option selected value="1">TODOS</option>
-                                {% for municipios in estado %}
-                                    <option >{{ municipios.mun_resid.upper}}</option>
-                                {% endfor %}
+                            <select class="form form-control" name="frmMunicipio"
+                                    id="frmMunicipio" disabled >
+                                    <option value="TODOS">TODOS</option>
+                                    {% for municipios in estado %}
+                                    <option value='{{ municipios.mun_resid}}' >{{ municipios.mun_resid.upper}}</option>
+                                    {% endfor %}
                             </select>
                         </div>
                     </div>
@@ -75,14 +76,28 @@
                             <label>Localidad:</label>
                         </div>
                         <div>
-                            <select class="form form-control" name="frmTipoServicio"
-                                    id="frmTipoServicio" disabled>
-                                <option selected value="1">TODOS</option>
-                                {% for localidades in municipio %}
-                                    <option >{{ localidades.loc_resid.upper}}</option>
-                                {% endfor %}
+                            <select class="form form-control" name="frmLocalidad"
+                                    id="frmLocalidad" disabled >
+                                    <option value="TODOS">TODOS</option>
+                                    {% for localidades in municipio %}
+                                    <option value='{{ localidades.loc_resid}}'>{{ localidades.loc_resid.upper}}</option>
+                                    {% endfor %}
                             </select>
                         </div>
+                    </div>
+                    <div class="col-sm-3">
+                            <div>
+                                <label>Sexo:</label>
+                            </div>
+                            <div>
+                                <select class="form form-control" name="frmGenero"
+                                        id="frmGenero">
+                                    <option selected value="TODOS">TODOS</option>
+                                    {% for genero in genero %}
+                                        <option value="{{ genero.sexo }}">{{ genero.sexo.upper}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                     </div>
                 </div>
                 <div class="col-sm-12">
@@ -91,11 +106,11 @@
                             <label>Tipo de Cancer:</label>
                         </div>
                         <div>
-                            <select class="form form-control" name="frmTipoServicio"
-                                    id="frmTipoServicio">
-                                <option selected value="1">TODOS</option>
+                            <select class="form form-control" name="frmCancer"
+                                    id="frmCancer">
+                                <option selected value="TODOS">TODOS</option>
                                 {% for tipoCancer in cancer %}
-                                    <option >{{ tipoCancer.lista_mex.upper}}</option>
+                                    <option value="{{ tipoCancer.lista_mex}}">{{ tipoCancer.lista_mex.upper}}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -105,79 +120,83 @@
                             <label>Año de registro:</label>
                         </div>
                         <div>
-                            <select class="form form-control" name="frmTipoServicio"
-                                    id="frmTipoServicio">
-                                <option selected value="1">TODOS</option>
+                            <select class="form form-control" name="frmRegistro"
+                                    id="frmRegistro">
+                                <option selected value="TODOS">TODOS</option>
                                 {% for años in año %}
-                                    <option >{{ años.anio_regis}}</option>
+                                    <option value="{{ años.anio_regis}}">{{ años.anio_regis}}</option>
                                 {% endfor %}
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-3">
                         <div>
-                            <label>Edad:</label>
+                            <label>Rango de Edades:</label>
                         </div>
                         <div>
-                            <select class="form form-control" name="frmTipoServicio"
-                                    id="frmTipoServicio">
-                                <option selected value="1">TODOS</option>
-                                {% for edad in edad %}
-                                    <option >{{ edad.edad.upper}}</option>
+                            <select class="form form-control" name="frmRangoEdad"
+                                    id="frmRangoEdad">
+                                <option selected value="TODOS">TODOS</option>
+                                {% for agruedad in agruedad %}
+                                    <option value="{{ agruedad.agru_edad}}">{{ agruedad.agru_edad.upper}}</option>
                                 {% endfor %}
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-3">
-                        <div>
-                            <label>Sexo:</label>
-                        </div>
-                        <div>
-                            <select class="form form-control" name="frmTipoServicio"
-                                    id="frmTipoServicio">
-                                <option selected value="1">TODOS</option>
-                                {% for genero in genero %}
-                                    <option >{{ genero.sexo.upper}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                            <div>
+                                <label>Tipo de mapa:</label>
+                            </div>
+                            <div>
+                                <select class="form form-control" name="frmTipoMapa"
+                                        id="frmTipoMapa">
+                                    <option selected value="PLANO">PLANO</option>
+                                    <option value="ELEVACION">ELEVACION DE TERRENO</option>
+                                </select>
+                            </div>
+                    </div>
+                    <div class="col-sm-3">
+                            <div>
+                                <label>Tipo de Registro:</label>
+                            </div>
+                            <div>
+                                <select class="form form-control" name="frmTipoRegistro"
+                                        id="frmTipoRegistro">
+                                    <option selected value="OCURRENCIA">OCURRENCIA</option>
+                                    <option value="RESIDENCIA">RESIDENCIA</option>
+                                </select>
+                            </div>
                     </div>
                 </div>
                 <div class="col-sm-12">
-                    <div class="col-sm-3">
-                        <div>
-                            <label>Tipo de mapa:</label>
-                        </div>
-                        <div>
-                            <select class="form form-control" name="frmTipoServicio"
-                                    id="frmTipoServicio">
-                                <option selected value="1">PLANO</option>
-                                <option value="2">ELEVACION DE TERRENO</option>
-                            </select>
-                        </div>
-                    </div>
+
                 </div>
 
                 <div class="col-sm-12 text-center"
                      style="padding-top: 2em; padding-bottom: 2em;">
-                    <a href=#>
+                    <a href="{% url 'mapascancer' %}">
                         <input name="btnConsultar" id="btnConsultar" type="submit" title="Consultar"
-                               class="btn&#x20;btn-primary" data-filter-datatable="datatableServicios"
-                               value="Consultar"> </a>
-                </div>
-                <div>
-                    <h2>Mapa de casos</h2>
-                    {{ map | safe }}
-                </div>
-                <div class="col-sm-12 text-right"
-                     style="padding-top: 2em; padding-bottom: 2em;">
-                    <a href={% url 'generarKML' %}>
-                        <input name="btnConsultar" id="btnConsultar" type="submit" title="Descargar KML"
+                               class="btn&#x20;btn-primary"
+                               value="Consultar">
+                        <input name="btnDescargar" id="btnConsultar" type="submit" title="Descargar KML"
                                class="btn&#x20;btn-primary"
                                value="Descargar KML" > </a>
                 </div>
+                <div class="col-sm-12 text-center" id = "divesconder" >
+                    <h4> {{ div }} </h4>
+                </div>
+                <div id="mapa" class="container">
+                    <h2>Mapa de casos</h2>
+                    <div>{{ map | safe }}</div>
+
+                </div>
+
             </div>
         </div>
+    </form>
+    </div>
+    <div>
+
     </div>
     <!-- Main Content end-->
     <!-- Content End -->

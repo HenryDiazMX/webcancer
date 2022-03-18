@@ -3,5 +3,5 @@ from .models import *
 
 # Register your models here.
 
-admin.site.register(guerrero)
 admin.site.register(republica)
+admin.site.register(republicaapi)
