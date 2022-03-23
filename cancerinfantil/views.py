@@ -379,7 +379,7 @@ def graficascancer(request):
             datos3.columns = ['Año', 'Tipo De Cancer', 'Conteo']  # change column names
             fig1 = px.pie(datos3, values='Conteo', names='Tipo De Cancer')
             fig1.update_traces(hoverinfo='label+percent', textposition='inside')
-            fig1.update_layout(autosize=False, width=1200, height=700, uniformtext_minsize=12, uniformtext_mode='hide')
+            fig1.update_layout(autosize=True, width=1200, height=700, uniformtext_minsize=12, uniformtext_mode='hide')
             texto = "Grafica de los tipos de Cancer Dominantes"
         if request.POST['frmTipo'] == "GENERO":
             datos2 = pd.DataFrame()
