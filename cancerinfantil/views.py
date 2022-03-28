@@ -349,11 +349,11 @@ def mapascancer(request):
 @csrf_exempt
 def graficascancer(request):
     global fig1
-    datos = republica.objects.all().values()
+    datos = republicaV2.objects.all().values()
     df = pd.DataFrame(datos)
-    estados = republica.objects.distinct('ent_resid')
-    años = republica.objects.distinct('anio_regis')
-    agruedad = republicaapi.objects.distinct('agru_edad')
+    estados = republicaV2.objects.distinct('ent_resid')
+    años = republicaV2.objects.distinct('anio_regis')
+    agruedad = republicaV2.objects.distinct('agru_edad')
     fig = ""
     texto = ""
     print = ""
@@ -379,7 +379,7 @@ def graficascancer(request):
             datos3.columns = ['Año', 'Tipo De Cancer', 'Conteo']  # change column names
             fig1 = px.pie(datos3, values='Conteo', names='Tipo De Cancer')
             fig1.update_traces(hoverinfo='label+percent', textposition='inside')
-            fig1.update_layout(autosize=True, width=1200, height=700, uniformtext_minsize=12, uniformtext_mode='hide')
+            fig1.update_layout(autosize=True, uniformtext_minsize=16, uniformtext_mode='hide',legend_itemsizing="constant")
             texto = "Grafica de los tipos de Cancer Dominantes"
         if request.POST['frmTipo'] == "GENERO":
             datos2 = pd.DataFrame()

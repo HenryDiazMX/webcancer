@@ -5,3 +5,4 @@ from .models import *
 
 admin.site.register(republica)
 admin.site.register(republicaapi)
+admin.site.register(republicaV2)

@@ -154,150 +154,144 @@
             max-width: 125px;
         }
     </style>
-</head>
-<body class="home">
-<div class="page-mask">
-    <div class="page-loader">
+    </head>
+    <body class="home">
+    <div class="page-mask">
+        <div class="page-loader">
+            <div class="spinner"></div>
+            Cargando...
+        </div>
 
-        <div class="spinner"></div>
-        Loading...
     </div>
-
-</div>
-<div class="wrap">
-    <!-- Header Start -->
-    <header id="header">
-        <!-- Header Top Bar Start -->
-        <!-- Header Top Bar End -->
-        <!-- Main Header Start -->
-        <div class="main-header">
-            <div class="container">
-                <!-- TopNav Start -->
-                <div class="topnav navbar-header">
-                    <a class="navbar-toggle down-button" data-toggle="collapse" data-target=".slidedown">
-                        <i class="fa fa-angle-down icon-current"></i>
-                    </a>
-                </div>
-                <!-- TopNav End -->
-                <!-- Logo Start -->
-                <div class="logo pull-left">
-                    <h1>
-                        <a href="{% url 'home' %}">
-                            <img id="imgLogo" src="{% static 'home/img/logo.png' %}" alt="Logo" class="imgLogo"
-                                 style="background-color: white">
+    <div class="wrap">
+        <!-- Header Start -->
+        <header id="header">
+            <!-- Header Top Bar Start -->
+            <!-- Header Top Bar End -->
+            <!-- Main Header Start -->
+            <div class="main-header">
+                <div class="container">
+                    <!-- TopNav Start -->
+                    <!-- TopNav End -->
+                    <!-- Logo Start -->
+                    <div class="logo pull-left">
+                        <h1>
+                            <a href="{% url 'home' %}" class="sf-with-ul">
+                                <img id="imgLogo" src="{% static 'home/img/logo.png' %}" alt="Logo" class="imgLogo"
+                                     style="background-color: white">
+                            </a>
+                        </h1>
+                    </div>
+                    <!-- Logo End -->
+                    <!-- Mobile Menu Start -->
+                    <div class="mobile navbar-header">
+                        <a class="navbar-toggle" data-toggle="collapse" href=".navbar-collapse">
+                            <i class="fa fa-bars fa-2x"></i>
                         </a>
-                    </h1>
-                </div>
-                <!-- Logo End -->
-                <!-- Mobile Menu Start -->
-                <div class="mobile navbar-header">
-                    <a class="navbar-toggle" data-toggle="collapse" href=".navbar-collapse">
-                        <i class="fa fa-bars fa-2x"></i>
-                    </a>
-                </div>
-                <!-- Mobile Menu End -->
-                <!-- Menu Start -->
-                <nav class="collapse navbar-collapse menu">
-                    <ul class="nav navbar-nav sf-menu">
-                        <li><a class="sf-with-ul" href="{% url 'mapascancer' %}">Mapas <span class="sf-sub-indicator"><i
-                                class="icon-angle-down "></i></span></a></li>
-                        <li><a class="sf-with-ul" href="{% url 'graficascancer' %}">Gráficas <span
-                                class="sf-sub-indicator"><i
-                                class="icon-angle-down "></i></span></a></li>
-                        <li><a class="sf-with-ul" href="{% url 'listascancer' %}">Listas <span class="sf-sub-indicator"><i
-                                class="icon-angle-down "></i></span></a></li>
-                        <li><a class="sf-with-ul" href="{% url 'contacto' %}">Contacto <span class="sf-sub-indicator"><i
-                                class="icon-angle-down "></i></span></a></li>
-                    </ul>
-                </nav>
-                <!-- Menu End -->
-            </div>
-        </div>
-        <!-- Main Header End -->
-    </header>
-    <!-- Header End -->
-    <!-- Content Start -->
-    {% block content %}
-
-    {% endblock %}
-    <div class="container">
-        <p></p>
-    </div>
-    <!-- Content End -->
-    <!-- Footer Start -->
-    <footer id="footer">
-        <!-- Footer Top Start -->
-        <div class="footer-top">
-            <div class="container">
-                <div class="row">
-                    <section class="col-lg-4 col-md-4 col-xs-12 col-sm-4 footer-one">
-
-                    </section>
-                    <section class="col-lg-4 col-md-4 col-xs-12 col-sm-4 footer-two">
-
-                    </section>
-                    <section class="col-lg-4 col-md-4 col-xs-12 col-sm-4 footer-three">
-                        <h3>Contacto</h3>
-                        <ul class="contact-us">
-                            <li>
-                                <i class="fa fa-map-marker"></i>
-                                <p>
-                                    <strong class="contact-pad">Dirección:</strong> ACAPULCO DE JUÁREZ, GUERRERO, MÉXICO
-                                </p>
-                            </li>
-                            <li>
-                                <i class="fa fa-phone"></i>
-                                <p><strong>Teléfono:</strong> (744) 4867677</p>
-                            </li>
-                            <li>
-                                <i class="fa fa-envelope"></i>
-                                <p><strong>Correo:</strong><a href="mailto:contacto@bemira.com">contacto@bemira.com</a>
-                                </p>
-                            </li>
+                    </div>
+                    <!-- Mobile Menu End -->
+                    <!-- Menu Start -->
+                    <nav class="collapse navbar-collapse menu">
+                        <ul class="nav navbar-nav sf-menu">
+                            <li><a class="sf-with-ul" href="{% url 'mapascancer' %}">Mapas <span class="sf-sub-indicator"><i
+                                    class="icon-angle-down "></i></span></a></li>
+                            <li><a class="sf-with-ul" href="{% url 'graficascancer' %}">Gráficas <span
+                                    class="sf-sub-indicator"><i
+                                    class="icon-angle-down "></i></span></a></li>
+                            <li><a class="sf-with-ul" href="{% url 'listascancer' %}">Listas <span class="sf-sub-indicator"><i
+                                    class="icon-angle-down "></i></span></a></li>
+                            <li><a class="sf-with-ul" href="{% url 'contacto' %}">Contacto <span class="sf-sub-indicator"><i
+                                    class="icon-angle-down "></i></span></a></li>
                         </ul>
-                    </section>
+                    </nav>
+                    <!-- Menu End -->
                 </div>
             </div>
+            <!-- Main Header End -->
+        </header>
+        <!-- Header End -->
+        <!-- Content Start -->
+        {% block content %}
+
+        {% endblock %}
+        <div class="container">
+            <p></p>
         </div>
-        <!-- Footer Top End -->
-        <!-- Footer Bottom Start -->
-        <div class="footer-bottom">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6 "> © Copyright 2022 by <a
-                            href="https://www.bemira.com" target="_blank" style="color: white;cursor: pointer;">
-                        Bemira</a>. Todos los derechos reservados.
+        <!-- Content End -->
+        <!-- Footer Start -->
+        <footer id="footer">
+            <!-- Footer Top Start -->
+            <div class="footer-top">
+                <div class="container">
+                    <div class="row">
+                        <section class="col-lg-4 col-md-4 col-xs-12 col-sm-4 footer-one">
+
+                        </section>
+                        <section class="col-lg-4 col-md-4 col-xs-12 col-sm-4 footer-two">
+
+                        </section>
+                        <section class="col-lg-4 col-md-4 col-xs-12 col-sm-4 footer-three">
+                            <h3>Contacto</h3>
+                            <ul class="contact-us">
+                                <li>
+                                    <i class="fa fa-map-marker"></i>
+                                    <p>
+                                        <strong class="contact-pad">Dirección:</strong> ACAPULCO DE JUÁREZ, GUERRERO, MÉXICO
+                                    </p>
+                                </li>
+                                <li>
+                                    <i class="fa fa-phone"></i>
+                                    <p><strong>Teléfono:</strong> (744) 4867677</p>
+                                </li>
+                                <li>
+                                    <i class="fa fa-envelope"></i>
+                                    <p><strong>Correo:</strong><a href="mailto:contacto@bemira.com">contacto@bemira.com</a>
+                                    </p>
+                                </li>
+                            </ul>
+                        </section>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Footer Bottom End -->
-    </footer>
-    <!-- Scroll To Top -->
-    <a href="#" class="scrollup"><i class="fa fa-angle-up"></i></a>
-</div>
-<!-- Wrap End -->
+            <!-- Footer Top End -->
+            <!-- Footer Bottom Start -->
+            <div class="footer-bottom">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6 "> © Copyright 2022 by <a
+                                href="https://www.bemira.com" target="_blank" style="color: white;cursor: pointer;">
+                            Bemira</a>. Todos los derechos reservados.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer Bottom End -->
+        </footer>
+        <!-- Scroll To Top -->
+        <a href="#" class="scrollup"><i class="fa fa-angle-up"></i></a>
+    </div>
+    <!-- Wrap End -->
 
-<!-- The Scripts -->
-<script src="{% static 'home/js/jquery.min.js' %}"></script>
-<script src="{% static 'home/js/bootstrap.js' %}"></script>
-<script src="{% static 'home/js/jquery.parallax.js' %}"></script>
-<script src="{% static 'home/js/jquery.wait.js' %}"></script>
-<script src="{% static 'home/js/modernizr-2.6.2.min.js' %}"></script>
-<script src="{% static 'home/js/revolution-slider/js/jquery.themepunch.revolution.min.js' %}"></script>
-<script src="{% static 'home/js/jquery.nivo.slider.pack.js' %}"></script>
-<script src="{% static 'home/js/jquery.prettyPhoto.js' %}"></script>
-<script src="{% static 'home/js/superfish.js' %}"></script>
-<script src="{% static 'home/js/tweetMachine.js' %}"></script>
-<script src="{% static 'home/js/tytabs.js' %}"></script>
-<script src="{% static 'home/js/jquery.gmap.min.js' %}"></script>
-<script src="{% static 'home/js/circularnav.js' %}"></script>
-<script src="{% static 'home/js/jquery.sticky.js' %}"></script>
-<script src="{% static 'home/js/jflickrfeed.js' %}"></script>
-<script src="{% static 'home/js/imagesloaded.pkgd.min.js' %}"></script>
-<script src="{% static 'home/js/waypoints.min.js' %}"></script>
-<script src="{% static 'home/js/spectrum.js' %}"></script>
-<script src="{% static 'home/js/switcher.js' %}"></script>
-<script src="{% static 'home/js/custom.js' %}"></script>
-</body>
+    <!-- The Scripts -->
+    <script src="{% static 'home/js/jquery.min.js' %}"></script>
+    <script src="{% static 'home/js/bootstrap.js' %}"></script>
+    <script src="{% static 'home/js/jquery.parallax.js' %}"></script>
+    <script src="{% static 'home/js/jquery.wait.js' %}"></script>
+    <script src="{% static 'home/js/modernizr-2.6.2.min.js' %}"></script>
+    <script src="{% static 'home/js/revolution-slider/js/jquery.themepunch.revolution.min.js' %}"></script>
+    <script src="{% static 'home/js/jquery.nivo.slider.pack.js' %}"></script>
+    <script src="{% static 'home/js/jquery.prettyPhoto.js' %}"></script>
+    <script src="{% static 'home/js/superfish.js' %}"></script>
+    <script src="{% static 'home/js/tweetMachine.js' %}"></script>
+    <script src="{% static 'home/js/tytabs.js' %}"></script>
+    <script src="{% static 'home/js/jquery.gmap.min.js' %}"></script>
+    <script src="{% static 'home/js/circularnav.js' %}"></script>
+    <script src="{% static 'home/js/jquery.sticky.js' %}"></script>
+    <script src="{% static 'home/js/jflickrfeed.js' %}"></script>
+    <script src="{% static 'home/js/imagesloaded.pkgd.min.js' %}"></script>
+    <script src="{% static 'home/js/waypoints.min.js' %}"></script>
+    <script src="{% static 'home/js/spectrum.js' %}"></script>
+    <script src="{% static 'home/js/switcher.js' %}"></script>
+    <script src="{% static 'home/js/custom.js' %}"></script>
+    </body>
 </html>
