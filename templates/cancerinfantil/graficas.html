@@ -2,6 +2,14 @@
 {% load static %}
 {% block title %} Gráficas | Cáncer Infantil{% endblock %}
 {% block content %}
+    <head>
+    <script type="text/javascript">
+    function showDiv1() {
+      document.getElementById("divesconder").style.visibility = "hidden";
+    }
+    setTimeout("showDiv1()", 10000); // after 15 sec
+    </script>
+    </head>
     <!-- Content Start -->
     <div id="main">
         <!-- Title, Breadcrumb Start-->
@@ -81,8 +89,8 @@
                         </div>
                         <div>
                             <select class="form form-control" name="frmRangoEdad"
-                                    id="frmRangoEdad">
-                                <option selected value="TODOS">TODOS</option>
+                                    id="frmRangoEdad" required>
+                                <option disabled value="" selected hidden>SELLECIONE UN RANGO</option>
                                 {% for agruedad in agruedad %}
                                     <option value="{{ agruedad.agru_edad}}">{{ agruedad.agru_edad.upper}}</option>
                                 {% endfor %}
@@ -96,6 +104,9 @@
                                          class="btn&#x20;btn-primary"
                                          value="Consultar"> </a>
                     </div>
+                </div>
+            <div class="col-sm-12 text-center" id = "divesconder" >
+                    <h4> {{ div }} </h4>
                 </div>
             <div id="grafica" class="container">
                 <h2>{{ texto }}</h2>

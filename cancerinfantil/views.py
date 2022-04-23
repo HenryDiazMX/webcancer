@@ -17,13 +17,13 @@ from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 # Generacion de la pagina de listas, llamando a los datos de la base
 def listascancer(request):
-    estados = republica.objects.order_by('ent_resid').all().distinct('ent_resid')
-    municipios = republica.objects.order_by('mun_resid').all().distinct('mun_resid')
-    localidades = republica.objects.order_by('loc_resid').all().distinct('loc_resid')
-    años = republica.objects.order_by('anio_regis').all().distinct('anio_regis')
-    tipoCancer = republica.objects.order_by('lista_mex').all().distinct('lista_mex')
-    genero = republica.objects.order_by('sexo').all().distinct('sexo')
-    agruedad = republicaapi.objects.distinct('agru_edad')
+    estados = Casostotalrepublica.objects.order_by('ent_resid').all().distinct('ent_resid')
+    municipios = Casostotalrepublica.objects.order_by('mun_resid').all().distinct('mun_resid')
+    localidades = Casostotalrepublica.objects.order_by('loc_resid').all().distinct('loc_resid')
+    años = Casostotalrepublica.objects.order_by('anio_regis').all().distinct('anio_regis')
+    tipoCancer = Casostotalrepublica.objects.order_by('lista_mex').all().distinct('lista_mex')
+    genero = Casostotalrepublica.objects.order_by('sexo').all().distinct('sexo')
+    agruedad = Casostotalrepublica.objects.distinct('agru_edad')
 
     return render(request, "cancerinfantil/listas.html",
                   {"estados": estados, "municipios": municipios, "localidades": localidades, "años": años,
@@ -36,7 +36,7 @@ def municipio(request):
     global listaMunicipios
     if request.method == 'POST':
         idEstado = request.POST['idEstado']
-        municipios = republica.objects.order_by('mun_resid').all().distinct('mun_resid').filter(ent_resid=idEstado)
+        municipios = republicaapi.objects.order_by('mun_resid').all().distinct('mun_resid').filter(ent_resid=idEstado)
         listaMunicipios = "<option value='TODOS'>TODOS</option>"
         for municipio in municipios:
             listaMunicipios = listaMunicipios + "<option value = '" + municipio.mun_resid + "'>" + municipio.mun_resid.upper() + "</option>"
@@ -49,7 +49,35 @@ def localidad(request):
     global listaLocalidades
     if request.method == 'POST':
         idMunicipio = request.POST['idMunicipio']
-        localidades = republica.objects.order_by('loc_resid').all().distinct('loc_resid').filter(mun_resid=idMunicipio)
+        localidades = republicaapi.objects.order_by('loc_resid').all().distinct('loc_resid').filter(
+            mun_resid=idMunicipio)
+        listaLocalidades = "<option value='TODOS'>TODOS</option>"
+        for localidad in localidades:
+            listaLocalidades = listaLocalidades + "<option value = '" + localidad.loc_resid + "'>" + localidad.loc_resid.upper() + "</option>"
+    return HttpResponse(listaLocalidades)
+
+
+# Obtencion del Municipio de acuerdo al Estado en la vista de listas y graficas
+@csrf_exempt
+def municipio2(request):
+    global listaMunicipios
+    if request.method == 'POST':
+        idEstado = request.POST['idEstado']
+        municipios = Casostotalrepublica.objects.order_by('mun_resid').all().distinct('mun_resid').filter(ent_resid=idEstado)
+        listaMunicipios = "<option value='TODOS'>TODOS</option>"
+        for municipio in municipios:
+            listaMunicipios = listaMunicipios + "<option value = '" + municipio.mun_resid + "'>" + municipio.mun_resid.upper() + "</option>"
+    return HttpResponse(listaMunicipios)
+
+
+# Obtencion de la Localidad de acuerdo al Municipio en la vista de listas y graficas
+@csrf_exempt
+def localidad2(request):
+    global listaLocalidades
+    if request.method == 'POST':
+        idMunicipio = request.POST['idMunicipio']
+        localidades = Casostotalrepublica.objects.order_by('loc_resid').all().distinct('loc_resid').filter(
+            mun_resid=idMunicipio)
         listaLocalidades = "<option value='TODOS'>TODOS</option>"
         for localidad in localidades:
             listaLocalidades = listaLocalidades + "<option value = '" + localidad.loc_resid + "'>" + localidad.loc_resid.upper() + "</option>"
@@ -59,11 +87,11 @@ def localidad(request):
 @csrf_exempt
 def export_csv(request):
     global queryset, response, df
-    queryset = republica.objects.all()
+    queryset = Casostotalrepublica.objects.all()
     if request.method == 'POST':
         # query
         if request.POST['frmEstado'] != "TODOS":
-            queryset = republica.objects.filter(ent_resid=request.POST['frmEstado'])
+            queryset = Casostotalrepublica.objects.filter(ent_resid=request.POST['frmEstado'])
             if request.POST['frmMunicipio'] != "TODOS":
                 queryset = queryset.filter(mun_resid=request.POST['frmMunicipio'])
                 if request.POST["frmLocalidad"] != "TODOS":
@@ -78,30 +106,22 @@ def export_csv(request):
         if request.POST['frmGenero'] != "TODOS":
             queryset = queryset.filter(sexo=request.POST['frmGenero'])
         # get fields of model
-        if request.POST['frmFormato'] == "CSV":
-            options = republica._meta
-            fields = [field.name for field in options.fields]
+        queryset = queryset.order_by('id')
+        options = Casostotalrepublica._meta
+        fields = [field.name for field in options.fields]
+        # build response
+        response = HttpResponse(
+            content_type='text/csv',
+            headers={'Content-Disposition': 'attachment; filename="ListasCancerInfantil.csv"'},
+        )
+        # writer
+        writer = csv.writer(response)
+        # writer header
+        writer.writerow([options.get_field(field).verbose_name for field in fields])
+        # writing data
+        for obj in queryset:
+            writer.writerow([getattr(obj, field) for field in fields])
 
-            # build response
-            response = HttpResponse(
-                content_type='text/csv',
-                headers={'Content-Disposition': 'attachment; filename="ListasCancerInfantil.csv"'},
-            )
-            # writer
-            writer = csv.writer(response)
-            # writer header
-            writer.writerow([options.get_field(field).verbose_name for field in fields])
-            # writing data
-            for obj in queryset:
-                writer.writerow([getattr(obj, field) for field in fields])
-
-        if request.POST['frmFormato'] == "EXCEL":
-            df = pd.DataFrame(queryset.values())
-            response = HttpResponse(
-                content_type='text/xlsx',
-                headers={'Content-Disposition': 'attachment; filename="ListasCancerInfantil.xlsx"'},
-            )
-            df.to_excel(response, sheet_name='Listas', index=False)
     return response
 
 
@@ -349,11 +369,11 @@ def mapascancer(request):
 @csrf_exempt
 def graficascancer(request):
     global fig1
-    datos = republicaV2.objects.all().values()
+    datos = Casostotalrepublica.objects.all().values()
     df = pd.DataFrame(datos)
-    estados = republicaV2.objects.distinct('ent_resid')
-    años = republicaV2.objects.distinct('anio_regis')
-    agruedad = republicaV2.objects.distinct('agru_edad')
+    estados = Casostotalrepublica.objects.distinct('ent_resid')
+    años = Casostotalrepublica.objects.distinct('anio_regis')
+    agruedad = Casostotalrepublica.objects.distinct('agru_edad')
     fig = ""
     texto = ""
     print = ""
@@ -379,7 +399,8 @@ def graficascancer(request):
             datos3.columns = ['Año', 'Tipo De Cancer', 'Conteo']  # change column names
             fig1 = px.pie(datos3, values='Conteo', names='Tipo De Cancer')
             fig1.update_traces(hoverinfo='label+percent', textposition='inside')
-            fig1.update_layout(autosize=True, uniformtext_minsize=16, uniformtext_mode='hide',legend_itemsizing="constant")
+            fig1.update_layout(autosize=True, uniformtext_minsize=16, uniformtext_mode='hide',
+                               legend_itemsizing="constant")
             texto = "Grafica de los tipos de Cancer Dominantes"
         if request.POST['frmTipo'] == "GENERO":
             datos2 = pd.DataFrame()
@@ -433,4 +454,5 @@ def graficascancer(request):
         fig = fig1.to_html()
 
     return render(request, "cancerinfantil/graficas.html",
-                  {"prin": print, "fig": fig, "texto": texto, "republica": estados, "año": años, "agruedad": agruedad, "df": df})
+                  {"prin": print, "fig": fig, "texto": texto, "republica": estados, "año": años, "agruedad": agruedad,
+                   "df": df})

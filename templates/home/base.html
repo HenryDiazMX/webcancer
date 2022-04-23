@@ -45,44 +45,6 @@
     <link rel="apple-touch-icon" sizes="114x114" href="{% static 'home/img/ico/apple-touch-icon-114.png' %}">
     <link rel="apple-touch-icon" sizes="144x144" href="{% static 'home/img/ico/apple-touch-icon-144.png' %}">
     <!-- Script code-->
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("#frmEstado").change(function () {
-                $("#frmEstado option:selected").each(function () {
-                    idEstado = $(this).val();
-                    //Hace el cambio de datos en el dropdown de los municipios
-                    $.post("/CancerInfantil/Municipio", {idEstado: idEstado}, function (data) {
-                        $("#frmMunicipio").html(data);
-                        $("#frmLocalidad").prop("disabled", true);
-                        $("#frmLocalidad").val("TODOS")
-                    });
-                });
-                if ($("#frmEstado").val() == "TODOS") {
-                    $("#frmMunicipio").prop("disabled", true);
-                    $("#frmLocalidad").prop("disabled", true);
-                    $("#frmLocalidad").val("TODOS")
-                    $("#frmMunicipio").val("TODOS")
-                } else {
-                    $("#frmMunicipio").prop("disabled", false);
-                }
-            });
-
-            $("#frmMunicipio").change(function () {
-                $("#frmMunicipio option:selected").each(function () {
-                    idMunicipio = $(this).val();
-                    //Hace el cambio de datos en el dropdown de las localidades
-                    $.post("/CancerInfantil/Localidad", {idMunicipio: idMunicipio}, function (data) {
-                        $("#frmLocalidad").html(data);
-                    });
-                });
-                if ($("#frmMunicipio").val() == "TODOS") {
-                    $("#frmLocalidad").prop("disabled", true);
-                } else {
-                    $("#frmLocalidad").prop("disabled", false);
-                }
-            });
-        });
-    </script>
     <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>

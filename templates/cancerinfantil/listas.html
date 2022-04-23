@@ -4,6 +4,15 @@
 {% block content %}
 <!-- Content Start -->
 {% csrf_token %}
+<head>
+    <script src="{% static 'home/js/listas/filter.js' %}"></script>
+    <script type="text/javascript">
+    function showDiv1() {
+      document.getElementById("divesconder").style.visibility = "hidden";
+    }
+    setTimeout("showDiv1()", 10000); // after 15 sec
+    </script>
+</head>
 <div id="main">
     <!-- Title, Breadcrumb Start-->
     <div class="breadcrumb-wrapper">
@@ -134,10 +143,8 @@
                                 <label for="frmFormato">Formato:</label>
                             </div>
                             <div class="col-sm-6">
-                                <select name="frmFormato" id="frmFormato" class="form-control" required="required">
-                                    <option value="" DISABLED SELECTED>SELECCIONE UNA OPCIÓN</option>
-                                    <option value="EXCEL">EXCEL</option>
-                                    <option value="CSV">CSV</option>
+                                <select name="frmFormato" id="frmFormato" class="form-control" disabled>
+                                    <option value="CSV" SELECTED>CSV</option>
                                 </select>
                             </div>
                         </div>
@@ -152,6 +159,9 @@
                             <div class="col-sm-4"></div>
                         </div>
                     </div>
+                <div class="col-sm-12 text-center" id = "divesconder" >
+                    <h4> {{ div }} </h4>
+                </div>
                 </div>
             </div>
         </div>

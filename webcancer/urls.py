@@ -30,7 +30,8 @@ urlpatterns = [
     ##Funciones que realizan operaciones en conjunto con JS
     path('CancerInfantil/Municipio', cancer_views.municipio, name="muncipio"),
     path('CancerInfantil/Localidad', cancer_views.localidad, name="localidad"),
-
-
+    ##Funciones para fitlrar pero en la vista de listas y graficas
+    path('CancerInfantil/Municipio2', cancer_views.municipio2, name="muncipio2"),
+    path('CancerInfantil/Localidad2', cancer_views.localidad2, name="localidad2"),
 
 ]
