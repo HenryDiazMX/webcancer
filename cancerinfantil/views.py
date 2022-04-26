@@ -1,4 +1,5 @@
 import csv
+import time
 import pandas as pd
 import folium
 import plotly.express as px
@@ -83,16 +84,17 @@ def localidad2(request):
 @csrf_exempt
 def export_csv(request):
     global queryset, response, df
-    queryset = Casostotalrepublica.objects.all()
     if request.method == 'POST':
-        # query
+        queryset = Casostotalrepublica.objects.all()
+        queryset = queryset.order_by('id')[:100]
+        #queryset = queryset.filter(ent_resid='Distrito Federal')
+        #queryset = queryset.filter(ent_resid="Jalisco")
         if request.POST['frmEstado'] != "TODOS":
             queryset = queryset.filter(ent_resid=request.POST['frmEstado'])
             if request.POST['frmMunicipio'] != "TODOS":
                 queryset = queryset.filter(mun_resid=request.POST['frmMunicipio'])
                 if request.POST["frmLocalidad"] != "TODOS":
                     queryset = queryset.filter(loc_resid=request.POST['frmLocalidad'])
-
         if request.POST['frmRangoEdad'] != "TODOS":
             queryset = queryset.filter(agru_edad=request.POST['frmRangoEdad'])
         if request.POST['frmRegistro'] != "TODOS":
@@ -102,21 +104,23 @@ def export_csv(request):
         if request.POST['frmGenero'] != "TODOS":
             queryset = queryset.filter(sexo=request.POST['frmGenero'])
         # get fields of model
-        queryset = queryset.order_by('id')
+        #queryset = queryset.order_by('id')
         options = Casostotalrepublica._meta
         fields = [field.name for field in options.fields]
         # build response
-        response = HttpResponse(
+        respuesta = HttpResponse(
             content_type='text/csv',
             headers={'Content-Disposition': 'attachment; filename="ListasCancerInfantil.csv"'},
         )
         # writer
-        writer = csv.writer(response)
+        writer = csv.writer(respuesta)
         # writer header
         writer.writerow([options.get_field(field).verbose_name for field in fields])
         # writing data
         for obj in queryset:
             writer.writerow([getattr(obj, field) for field in fields])
+
+        response = respuesta
 
     return response
 
@@ -366,88 +370,91 @@ def mapascancer(request):
 def graficascancer(request):
     global fig1
     datos = Casostotalrepublica.objects.all().values()
-    df = pd.DataFrame(datos)
+    df = None
     estados = Casostotalrepublica.objects.distinct('ent_resid')
     anios = Casostotalrepublica.objects.distinct('anio_regis')
     agruedad = Casostotalrepublica.objects.distinct('agru_edad')
     fig = ""
     texto = ""
+    div = ""
+    try:
+        if request.method == 'POST':
+            if request.POST['frmEstado'] != "TODOS":
+                datos = datos.filter(ent_resid=request.POST['frmEstado'])
+            if request.POST['frmAño'] != "TODOS":
+                datos = datos.filter(anio_regis=request.POST['frmAño'])
+            if request.POST['frmRangoEdad'] != "TODOS":
+                datos = datos.filter(agru_edad=request.POST['frmRangoEdad'])
 
-    if request.method == 'POST':
-        if request.POST['frmEstado'] != "TODOS":
-            datos = datos.filter(ent_resid=request.POST['frmEstado'])
-        if request.POST['frmAño'] != "TODOS":
-            datos = datos.filter(anio_regis=request.POST['frmAño'])
-        if request.POST['frmRangoEdad'] != "TODOS":
-            datos = datos.filter(agru_edad=request.POST['frmRangoEdad'])
+            df = pd.DataFrame(datos)
 
-        df = pd.DataFrame(datos)
+            if request.POST['frmTipo'] == "DOMINANTE":
+                datos2 = pd.DataFrame()
+                for i in range(0, len(df)):
+                    datos2.loc[i, 'año'] = df.loc[i, 'anio_regis']
+                    datos2.loc[i, 'lista_mex'] = df.loc[i, 'lista_mex']
+                value_counts = datos2.value_counts(sort=True)
+                df_val_counts = pd.DataFrame(value_counts)
+                datos3 = df_val_counts.reset_index()
+                datos3.columns = ['Año', 'Tipo De Cancer', 'Conteo']  # change column names
+                fig1 = px.pie(datos3, values='Conteo', names='Tipo De Cancer')
+                fig1.update_traces(hoverinfo='label+percent', textposition='inside')
+                fig1.update_layout(autosize=True, uniformtext_minsize=16, uniformtext_mode='hide',
+                                   legend_itemsizing="constant")
+                texto = "Gráfica de los tipos de Cáncer Dominantes"
+            if request.POST['frmTipo'] == "GENERO":
+                datos2 = pd.DataFrame()
+                for i in range(0, len(df)):
+                    datos2.loc[i, 'AÑO'] = df.loc[i, 'anio_regis']
+                    datos2.loc[i, 'SEXO'] = df.loc[i, 'sexo']
+                value_counts = datos2.value_counts(sort=True)
+                df_val_counts = pd.DataFrame(value_counts)
+                datos3 = df_val_counts.reset_index()
+                datos3.columns = ['AÑO', 'SEXO', 'CONTEO']  # change column names
+                fig1 = px.bar(datos3, x="AÑO", y="CONTEO", color="SEXO", height=700)
+                texto = "Gráficas por Año de Registro y Genero"
+            if request.POST['frmTipo'] == "OCURRENCIA":
+                datos2 = pd.DataFrame()
+                for i in range(0, len(df)):
+                    datos2.loc[i, 'SITIO_OCUR'] = df.loc[i, 'sitio_ocur']
+                value_counts = datos2.value_counts(sort=True)
+                df_val_counts = pd.DataFrame(value_counts)
+                datos3 = df_val_counts.reset_index()
+                datos3.columns = ['SITIO DE OCURRENCIA', 'CONTEO']  # change column names
+                fig1 = px.bar(datos3, x="SITIO DE OCURRENCIA", y="CONTEO", color='SITIO DE OCURRENCIA', text="CONTEO",
+                              height=700)
+                fig1.update_traces(textposition='outside')
+                fig1.update_layout(uniformtext_minsize=1, uniformtext_mode='hide', showlegend=False)
+                texto = "Lugares de Ocurrencia"
+            if request.POST['frmTipo'] == "AREA":
+                datos2 = pd.DataFrame()
+                for i in range(0, len(df)):
+                    datos2.loc[i, 'AÑO'] = df.loc[i, 'anio_regis']
+                    datos2.loc[i, 'TIPO DE AREA'] = df.loc[i, 'area_ur']
+                value_counts = datos2.value_counts(sort=True)
+                df_val_counts = pd.DataFrame(value_counts)
+                datos3 = df_val_counts.reset_index()
+                datos3.columns = ['AÑO', 'TIPO DE AREA', 'CONTEO']  # change column names
+                fig1 = px.bar(datos3, x="AÑO", y="CONTEO", color="TIPO DE AREA", height=700)
+                texto = "Tipo de Área donde Residía el Niño(a)"
+            if request.POST['frmTipo'] == "EDAD":
+                datos2 = pd.DataFrame()
+                for i in range(0, len(df)):
+                    datos2.loc[i, 'EDAD'] = df.loc[i, 'edad_abs']
+                value_counts = datos2.value_counts(sort=True)
+                df_val_counts = pd.DataFrame(value_counts)
+                datos3 = df_val_counts.reset_index()
+                datos3.columns = ['EDAD', 'CONTEO']  # change column names
+                datos3 = datos3.sort_values('EDAD', ascending=True)
+                fig1 = px.bar(datos3, x="EDAD", y="CONTEO", color='EDAD', text="CONTEO", height=700)
+                fig1.update_traces(textposition='outside')
+                fig1.update_layout(uniformtext_minsize=7, uniformtext_mode='hide', showlegend=False)
+                texto = "Gráfica comparativa de edades en el Cáncer Infantil"
 
-        if request.POST['frmTipo'] == "DOMINANTE":
-            datos2 = pd.DataFrame()
-            for i in range(0, len(df)):
-                datos2.loc[i, 'año'] = df.loc[i, 'anio_regis']
-                datos2.loc[i, 'lista_mex'] = df.loc[i, 'lista_mex']
-            value_counts = datos2.value_counts(sort=True)
-            df_val_counts = pd.DataFrame(value_counts)
-            datos3 = df_val_counts.reset_index()
-            datos3.columns = ['Año', 'Tipo De Cancer', 'Conteo']  # change column names
-            fig1 = px.pie(datos3, values='Conteo', names='Tipo De Cancer')
-            fig1.update_traces(hoverinfo='label+percent', textposition='inside')
-            fig1.update_layout(autosize=True, uniformtext_minsize=16, uniformtext_mode='hide',
-                               legend_itemsizing="constant")
-            texto = "Grafica de los tipos de Cancer Dominantes"
-        if request.POST['frmTipo'] == "GENERO":
-            datos2 = pd.DataFrame()
-            for i in range(0, len(df)):
-                datos2.loc[i, 'AÑO'] = df.loc[i, 'anio_regis']
-                datos2.loc[i, 'SEXO'] = df.loc[i, 'sexo']
-            value_counts = datos2.value_counts(sort=True)
-            df_val_counts = pd.DataFrame(value_counts)
-            datos3 = df_val_counts.reset_index()
-            datos3.columns = ['AÑO', 'SEXO', 'CONTEO']  # change column names
-            fig1 = px.bar(datos3, x="AÑO", y="CONTEO", color="SEXO", height=700)
-            texto = "Graficas por Año de Registro y Genero"
-        if request.POST['frmTipo'] == "OCURRENCIA":
-            datos2 = pd.DataFrame()
-            for i in range(0, len(df)):
-                datos2.loc[i, 'SITIO_OCUR'] = df.loc[i, 'sitio_ocur']
-            value_counts = datos2.value_counts(sort=True)
-            df_val_counts = pd.DataFrame(value_counts)
-            datos3 = df_val_counts.reset_index()
-            datos3.columns = ['SITIO DE OCURRENCIA', 'CONTEO']  # change column names
-            fig1 = px.bar(datos3, x="SITIO DE OCURRENCIA", y="CONTEO", color='SITIO DE OCURRENCIA', text="CONTEO",
-                          height=700)
-            fig1.update_traces(textposition='outside')
-            fig1.update_layout(uniformtext_minsize=1, uniformtext_mode='hide', showlegend=False)
-            texto = "Lugares de Ocurrencia"
-        if request.POST['frmTipo'] == "AREA":
-            datos2 = pd.DataFrame()
-            for i in range(0, len(df)):
-                datos2.loc[i, 'AÑO'] = df.loc[i, 'anio_regis']
-                datos2.loc[i, 'TIPO DE AREA'] = df.loc[i, 'area_ur']
-            value_counts = datos2.value_counts(sort=True)
-            df_val_counts = pd.DataFrame(value_counts)
-            datos3 = df_val_counts.reset_index()
-            datos3.columns = ['AÑO', 'TIPO DE AREA', 'CONTEO']  # change column names
-            fig1 = px.bar(datos3, x="AÑO", y="CONTEO", color="TIPO DE AREA", height=700)
-            texto = "Tipo de Area donde Residia el Niño(a)"
-        if request.POST['frmTipo'] == "EDAD":
-            datos2 = pd.DataFrame()
-            for i in range(0, len(df)):
-                datos2.loc[i, 'EDAD'] = df.loc[i, 'edad_abs']
-            value_counts = datos2.value_counts(sort=True)
-            df_val_counts = pd.DataFrame(value_counts)
-            datos3 = df_val_counts.reset_index()
-            datos3.columns = ['EDAD', 'CONTEO']  # change column names
-            datos3 = datos3.sort_values('EDAD', ascending=True)
-            fig1 = px.bar(datos3, x="EDAD", y="CONTEO", color='EDAD', text="CONTEO", height=700)
-            fig1.update_traces(textposition='outside')
-            fig1.update_layout(uniformtext_minsize=7, uniformtext_mode='hide', showlegend=False)
-            texto = "Grafica comparativa de edades en el Cancer Infantil"
-
-        fig = fig1.to_html()
+            fig = fig1.to_html()
+    except:
+        div = "Su consulta no tiene casos para mostrar, realice otra consulta"
 
     return render(request, "cancerinfantil/graficas.html",
                   {"fig": fig, "texto": texto, "republica": estados, "año": anios, "agruedad": agruedad,
-                   "df": df})
+                   "df": df, "div": div})
