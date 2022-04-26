@@ -16,6 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 # Generacion de la pagina de listas, llamando a los datos de la base
+@csrf_exempt
 def listascancer(request):
     estados = Casostotalrepublica.objects.order_by('ent_resid').all().distinct('ent_resid')
     municipios = Casostotalrepublica.objects.order_by('mun_resid').all().distinct('mun_resid')
@@ -91,7 +92,7 @@ def export_csv(request):
     if request.method == 'POST':
         # query
         if request.POST['frmEstado'] != "TODOS":
-            queryset = Casostotalrepublica.objects.filter(ent_resid=request.POST['frmEstado'])
+            queryset = queryset.filter(ent_resid=request.POST['frmEstado'])
             if request.POST['frmMunicipio'] != "TODOS":
                 queryset = queryset.filter(mun_resid=request.POST['frmMunicipio'])
                 if request.POST["frmLocalidad"] != "TODOS":
@@ -376,7 +377,6 @@ def graficascancer(request):
     agruedad = Casostotalrepublica.objects.distinct('agru_edad')
     fig = ""
     texto = ""
-    print = ""
 
     if request.method == 'POST':
         if request.POST['frmEstado'] != "TODOS":
@@ -454,5 +454,5 @@ def graficascancer(request):
         fig = fig1.to_html()
 
     return render(request, "cancerinfantil/graficas.html",
-                  {"prin": print, "fig": fig, "texto": texto, "republica": estados, "año": años, "agruedad": agruedad,
+                  {"fig": fig, "texto": texto, "republica": estados, "año": años, "agruedad": agruedad,
                    "df": df})

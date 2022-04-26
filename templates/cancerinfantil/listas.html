@@ -119,7 +119,7 @@
                                 <select name="frmCancer" class="form-control" id="frmCancer">
                                     <option value="TODOS">TODOS</option>
                                     {% for tipoCancer in cancer %}
-                                    <option value="{{ tipoCancer.lista_mex.upper}}">{{ tipoCancer.lista_mex.upper}}</option>
+                                    <option value="{{ tipoCancer.lista_mex}}">{{ tipoCancer.lista_mex.upper}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -133,7 +133,7 @@
                                 <select name="frmGenero" class="form-control" id="frmGenero">
                                     <option value="TODOS">TODOS</option>
                                     {% for genero in genero %}
-                                    <option value="{{ genero.sexo.upper}}" >{{ genero.sexo.upper}}</option>
+                                    <option value="{{ genero.sexo}}" >{{ genero.sexo.upper}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
