@@ -1,3 +1,4 @@
+import codecs
 import csv
 import time
 import pandas as pd
@@ -5,7 +6,9 @@ import folium
 import plotly.express as px
 import simplekml as simplekml
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, StreamingHttpResponse
+
+from webcancer import settings
 from .models import *
 from django.views.decorators.csrf import csrf_exempt
 
@@ -80,15 +83,89 @@ def localidad2(request):
             listaLocalidades = listaLocalidades + "<option value = '" + localidad.loc_resid + "'>" + localidad.loc_resid.upper() + "</option>"
     return HttpResponse(listaLocalidades)
 
+class CSVBuffer:
+    """An object that implements just the write method of the file-like
+    interface.
+    """
+    def write(self, value):
+        """Return the string to write."""
+        return value
+
+class CSVStream:
+    """Class to stream (download) an iterator to a
+    CSV file."""
+    def export(self, filename, iterator, serializer):
+        # 1. Create our writer object with the pseudo buffer
+        writer = csv.writer(CSVBuffer())
+
+        # 2. Create the StreamingHttpResponse using our iterator as streaming content
+        response = StreamingHttpResponse((writer.writerow(serializer(data)) for data in iterator),
+                                         content_type="text/csv")
+
+        # 3. Add additional headers to the response
+        response['Content-Disposition'] = f"attachment; filename={filename}.csv"
+        # 4. Return the response
+        return response
+
+def csv_serializer(data):
+    # Format the row to append to the CSV file
+    #options = Casostotalrepublica._meta
+    #data = [field.name for field in options.fields]
+    return [
+        data.id,
+        data.ent_regis,
+        data.mun_regis,
+        data.ent_resid,
+        data.mun_resid,
+        data.tloc_resid,
+        data.loc_resid,
+        data.ent_ocurr,
+        data.mun_ocurr,
+        data.tloc_ocurr,
+        data.loc_ocurr,
+        data.causa_def,
+        data.lista_mex,
+        data.sexo,
+        data.edad,
+        data.dia_ocurr,
+        data.mes_ocurr,
+        data.anio_ocur,
+        data.dia_regis,
+        data.mes_regis,
+        data.anio_regis,
+        data.dia_nacim,
+        data.mes_nacim,
+        data.anio_nacim,
+        data.ocupacion,
+        data.escolarida,
+        data.edo_civil,
+        data.necropsia,
+        data.asist_medi,
+        data.sitio_ocur,
+        data.cond_cert,
+        data.nacionalid,
+        data.derechohab,
+        data.embarazo,
+        data.rel_emba,
+        data.horas,
+        data.minutos,
+        data.vio_fami,
+        data.area_ur,
+        data.edad_agru,
+        data.lengua,
+        data.cond_act,
+        data.agru_edad,
+        data.edad_abs
+    ]
+
 
 @csrf_exempt
 def export_csv(request):
     global queryset, response, df
     if request.method == 'POST':
+        # 1. Get the iterator of the QuerySet
         queryset = Casostotalrepublica.objects.all()
-        queryset = queryset.order_by('id')[:100]
-        #queryset = queryset.filter(ent_resid='Distrito Federal')
-        #queryset = queryset.filter(ent_resid="Jalisco")
+        queryset = queryset.order_by('id')
         if request.POST['frmEstado'] != "TODOS":
             queryset = queryset.filter(ent_resid=request.POST['frmEstado'])
             if request.POST['frmMunicipio'] != "TODOS":
@@ -103,26 +180,13 @@ def export_csv(request):
             queryset = queryset.filter(lista_mex=request.POST['frmCancer'])
         if request.POST['frmGenero'] != "TODOS":
             queryset = queryset.filter(sexo=request.POST['frmGenero'])
-        # get fields of model
-        #queryset = queryset.order_by('id')
-        options = Casostotalrepublica._meta
-        fields = [field.name for field in options.fields]
-        # build response
-        respuesta = HttpResponse(
-            content_type='text/csv',
-            headers={'Content-Disposition': 'attachment; filename="ListasCancerInfantil.csv"'},
-        )
-        # writer
-        writer = csv.writer(respuesta)
-        # writer header
-        writer.writerow([options.get_field(field).verbose_name for field in fields])
-        # writing data
-        for obj in queryset:
-            writer.writerow([getattr(obj, field) for field in fields])
+        iterator = queryset.iterator()
 
-        response = respuesta
+        # 2. Create the instance of our CSVStream class
+        csv_stream = CSVStream()
 
-    return response
+        # 3. Stream (download) the file
+        return csv_stream.export("myfile", iterator, csv_serializer)
 
 
 # Generacion de la vista inicial de la pagina de Mapas, genera el mapa sin casos, al hacer un POST toma los datos para hacer filtros
