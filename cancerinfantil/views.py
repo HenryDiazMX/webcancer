@@ -1,15 +1,10 @@
 import csv
 import pandas as pd
 import folium
-from pprint import pprint
 import plotly.express as px
 import simplekml as simplekml
-import openpyxl
-from django import forms
 from django.shortcuts import render
 from django.http import HttpResponse
-
-from .forms import *
 from .models import *
 from django.views.decorators.csrf import csrf_exempt
 
@@ -21,13 +16,13 @@ def listascancer(request):
     estados = Casostotalrepublica.objects.order_by('ent_resid').all().distinct('ent_resid')
     municipios = Casostotalrepublica.objects.order_by('mun_resid').all().distinct('mun_resid')
     localidades = Casostotalrepublica.objects.order_by('loc_resid').all().distinct('loc_resid')
-    años = Casostotalrepublica.objects.order_by('anio_regis').all().distinct('anio_regis')
+    anios = Casostotalrepublica.objects.order_by('anio_regis').all().distinct('anio_regis')
     tipoCancer = Casostotalrepublica.objects.order_by('lista_mex').all().distinct('lista_mex')
     genero = Casostotalrepublica.objects.order_by('sexo').all().distinct('sexo')
     agruedad = Casostotalrepublica.objects.distinct('agru_edad')
 
     return render(request, "cancerinfantil/listas.html",
-                  {"estados": estados, "municipios": municipios, "localidades": localidades, "años": años,
+                  {"estados": estados, "municipios": municipios, "localidades": localidades, "años": anios,
                    "cancer": tipoCancer, "genero": genero, "agruedad": agruedad})
 
 
@@ -133,7 +128,7 @@ def mapascancer(request):
     estados = republicaapi.objects.distinct('ent_resid')
     municipios = republicaapi.objects.distinct('mun_resid')
     localidades = republicaapi.objects.distinct('loc_resid')
-    años = republicaapi.objects.distinct('anio_regis')
+    anios = republicaapi.objects.distinct('anio_regis')
     tipoCancer = republicaapi.objects.distinct('lista_mex')
     genero = republicaapi.objects.distinct('sexo')
     agruedad = republicaapi.objects.distinct('agru_edad')
@@ -350,7 +345,7 @@ def mapascancer(request):
 
     context = {
         'map': map,
-        "republica": estados, "estado": municipios, "municipio": localidades, "año": años,
+        "republica": estados, "estado": municipios, "municipio": localidades, "año": anios,
         "cancer": tipoCancer, "genero": genero, "agruedad": agruedad,
         "div": div,
     }
@@ -373,7 +368,7 @@ def graficascancer(request):
     datos = Casostotalrepublica.objects.all().values()
     df = pd.DataFrame(datos)
     estados = Casostotalrepublica.objects.distinct('ent_resid')
-    años = Casostotalrepublica.objects.distinct('anio_regis')
+    anios = Casostotalrepublica.objects.distinct('anio_regis')
     agruedad = Casostotalrepublica.objects.distinct('agru_edad')
     fig = ""
     texto = ""
@@ -454,5 +449,5 @@ def graficascancer(request):
         fig = fig1.to_html()
 
     return render(request, "cancerinfantil/graficas.html",
-                  {"fig": fig, "texto": texto, "republica": estados, "año": años, "agruedad": agruedad,
+                  {"fig": fig, "texto": texto, "republica": estados, "año": anios, "agruedad": agruedad,
                    "df": df})
