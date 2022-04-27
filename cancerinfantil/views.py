@@ -442,6 +442,7 @@ def graficascancer(request):
     texto = ""
     div = ""
     try:
+        inicio = time.time()
         if request.method == 'POST':
             if request.POST['frmEstado'] != "TODOS":
                 datos = datos.filter(ent_resid=request.POST['frmEstado'])
@@ -463,49 +464,53 @@ def graficascancer(request):
                 fig1.update_layout(autosize=True, uniformtext_minsize=16, uniformtext_mode='hide',
                                    legend_itemsizing="constant")
                 texto = "Gráfica de los tipos de Cáncer Dominantes"
-            if request.POST['frmTipo'] == "GENERO":
-                datos2 = (df[['anio_regis', 'sexo']])
-                value_counts = datos2.value_counts()
-                df_val_counts = pd.DataFrame(value_counts)
-                datos3 = df_val_counts.reset_index()
-                datos3.columns = ['AÑO', 'SEXO', 'CONTEO']  # change column names
-                fig1 = px.bar(datos3, x="AÑO", y="CONTEO", color="SEXO", height=700)
-                texto = "Gráficas por Año de Registro y Genero"
-            if request.POST['frmTipo'] == "OCURRENCIA":
-                datos2 = (df[['sitio_ocur']])
-                value_counts = datos2.value_counts()
-                df_val_counts = pd.DataFrame(value_counts)
-                datos3 = df_val_counts.reset_index()
-                datos3.columns = ['SITIO DE OCURRENCIA', 'CONTEO']  # change column names
-                fig1 = px.bar(datos3, x="SITIO DE OCURRENCIA", y="CONTEO", color='SITIO DE OCURRENCIA', text="CONTEO",
-                              height=700)
-                fig1.update_traces(textposition='outside')
-                fig1.update_layout(uniformtext_minsize=1, uniformtext_mode='hide', showlegend=False)
-                texto = "Lugares de Ocurrencia"
-            if request.POST['frmTipo'] == "AREA":
-                datos2 = (df[['anio_regis', 'area_ur']])
-                value_counts = datos2.value_counts()
-                df_val_counts = pd.DataFrame(value_counts)
-                datos3 = df_val_counts.reset_index()
-                datos3.columns = ['AÑO', 'TIPO DE AREA', 'CONTEO']  # change column names
-                fig1 = px.bar(datos3, x="AÑO", y="CONTEO", color="TIPO DE AREA", height=700)
-                texto = "Tipo de Área donde Residía el Niño(a)"
-            if request.POST['frmTipo'] == "EDAD":
-                datos2 = (df[['edad_abs']])
-                value_counts = datos2.value_counts()
-                df_val_counts = pd.DataFrame(value_counts)
-                datos3 = df_val_counts.reset_index()
-                datos3.columns = ['EDAD', 'CONTEO']  # change column names
-                fig1 = px.bar(datos3, x="EDAD", y="CONTEO", color='EDAD', text="CONTEO", height=700)
-                fig1.update_traces(textposition='outside')
-                fig1.update_layout(uniformtext_minsize=7, uniformtext_mode='hide', showlegend=False)
-                texto = "Gráfica comparativa de edades en el Cáncer Infantil"
+            # if request.POST['frmTipo'] == "GENERO":
+            #     datos2 = (df[['anio_regis', 'sexo']])
+            #     value_counts = datos2.value_counts()
+            #     df_val_counts = pd.DataFrame(value_counts)
+            #     datos3 = df_val_counts.reset_index()
+            #     datos3.columns = ['AÑO', 'SEXO', 'CONTEO']  # change column names
+            #     fig1 = px.bar(datos3, x="AÑO", y="CONTEO", color="SEXO", height=700)
+            #     texto = "Gráficas por Año de Registro y Genero"
+            # if request.POST['frmTipo'] == "OCURRENCIA":
+            #     datos2 = (df[['sitio_ocur']])
+            #     value_counts = datos2.value_counts()
+            #     df_val_counts = pd.DataFrame(value_counts)
+            #     datos3 = df_val_counts.reset_index()
+            #     datos3.columns = ['SITIO DE OCURRENCIA', 'CONTEO']  # change column names
+            #     fig1 = px.bar(datos3, x="SITIO DE OCURRENCIA", y="CONTEO", color='SITIO DE OCURRENCIA', text="CONTEO",
+            #                   height=700)
+            #     fig1.update_traces(textposition='outside')
+            #     fig1.update_layout(uniformtext_minsize=1, uniformtext_mode='hide', showlegend=False)
+            #     texto = "Lugares de Ocurrencia"
+            # if request.POST['frmTipo'] == "AREA":
+            #     datos2 = (df[['anio_regis', 'area_ur']])
+            #     value_counts = datos2.value_counts()
+            #     df_val_counts = pd.DataFrame(value_counts)
+            #     datos3 = df_val_counts.reset_index()
+            #     datos3.columns = ['AÑO', 'TIPO DE AREA', 'CONTEO']  # change column names
+            #     fig1 = px.bar(datos3, x="AÑO", y="CONTEO", color="TIPO DE AREA", height=700)
+            #     texto = "Tipo de Área donde Residía el Niño(a)"
+            # if request.POST['frmTipo'] == "EDAD":
+            #     datos2 = (df[['edad_abs']])
+            #     value_counts = datos2.value_counts()
+            #     df_val_counts = pd.DataFrame(value_counts)
+            #     datos3 = df_val_counts.reset_index()
+            #     datos3.columns = ['EDAD', 'CONTEO']  # change column names
+            #     fig1 = px.bar(datos3, x="EDAD", y="CONTEO", color='EDAD', text="CONTEO", height=700)
+            #     fig1.update_traces(textposition='outside')
+            #     fig1.update_layout(uniformtext_minsize=7, uniformtext_mode='hide', showlegend=False)
+            #     texto = "Gráfica comparativa de edades en el Cáncer Infantil"
 
             fig = fig1.to_html()
+            fin = time.time()
+            tiempo = fin-inicio
     except:
         div = "Su consulta no tiene casos para mostrar, realice otra consulta"
 
-    return render(request, "cancerinfantil/graficas.html",
-                {"fig": fig, "texto": texto, "republica": estados, "año": anios, "agruedad": agruedad,
-                "df": df, "div": div})
+    # return render(request, "cancerinfantil/graficas.html",
+    #             {"fig": fig, "texto": texto, "republica": estados, "año": anios, "agruedad": agruedad,
+    #             "df": df, "div": div})
+
+    return HttpResponse(tiempo)
 
