@@ -433,7 +433,7 @@ def mapascancer(request):
 @csrf_exempt
 def graficascancer(request):
     global fig1
-    datos = Casostotalrepublica.objects.all().values()
+    datos = Casostotalrepublica.objects.all().values('id','ent_resid','lista_mex','sexo','edad','anio_regis','sitio_ocur','area_ur','agru_edad')
     df = None
     estados = Casostotalrepublica.objects.distinct('ent_resid')
     anios = Casostotalrepublica.objects.distinct('anio_regis')

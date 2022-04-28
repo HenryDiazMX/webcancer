@@ -7,10 +7,23 @@
 <head>
     <script src="{% static 'home/js/listas/filter.js' %}"></script>
     <script type="text/javascript">
-    function showDiv1() {
-      document.getElementById("divesconder").style.visibility = "hidden";
-    }
-    setTimeout("showDiv1()", 10000); // after 15 sec
+
+        function showDiv1() {
+            document.getElementById("divesconder").style.visibility = "hidden";
+        }
+        setTimeout("showDiv1()", 10000); // after 10 sec
+
+        $(document).ready(function () {
+            $("#btnConsultar").click(function () {
+                $("#btnConsultar").toggle(false);
+                $("#divesconder").toggle(true);
+                $("#mensaje").text("Su descarga ha comenzado, si necesita realizar otra consulta, por favor recargue la pagina");
+                $("#frmConsultarListas:input").attr('readonly','readonly');
+            });
+        });
+
+
+
     </script>
 </head>
 <div id="main">
@@ -37,7 +50,7 @@
     <!-- Title, Breadcrumb End-->
     <!-- Main Content start-->
     <form method="post" name="frmConsultarListas" class="form-horizontal" action="{% url 'generarlista' %}"
-        id="frmConsultarListas"> {% csrf_token %}
+        id="frmConsultarListas" > {% csrf_token %}
         <div id="content">
             <div id="content" class="container">
                 <div class="row">
@@ -148,17 +161,20 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" id="divBtn">
                             <div class="col-sm-7"></div>
                             <div class="col-sm-1">
                                 <a href="{% url 'generarlista' %}">
-                                    <input name="btnConsultar" id="btnReporte" type="submit" title="Consultar"
-                                        class="btn&#x20;btn-primary" value="Consultar">
+                                    <input name="btnConsultar" id="btnConsultar" type="submit" title="Consultar"
+                                        class="btn&#x20;btn-primary" value="Consultar" >
                                 </a>
                             </div>
                             <div class="col-sm-4"></div>
                         </div>
                     </div>
+                <div class="col-sm-12 text-center">
+                    <h4 id="mensaje">  </h4>
+                </div>
                 <div class="col-sm-12 text-center" id = "divesconder" >
                     <h4> {{ div }} </h4>
                 </div>
