@@ -7,23 +7,25 @@
 <head>
     <script src="{% static 'home/js/listas/filter.js' %}"></script>
     <script type="text/javascript">
-
         function showDiv1() {
             document.getElementById("divesconder").style.visibility = "hidden";
         }
         setTimeout("showDiv1()", 10000); // after 10 sec
-
         $(document).ready(function () {
             $("#btnConsultar").click(function () {
-                $("#btnConsultar").toggle(false);
-                $("#divesconder").toggle(true);
-                $("#mensaje").text("Su descarga ha comenzado, si necesita realizar otra consulta, por favor recargue la pagina");
-                $("#frmConsultarListas:input").attr('readonly','readonly');
+                setTimeout("bloquearBtn()",1000);
             });
         });
-
-
-
+        function bloquearBtn(){
+                $("#btnConsultar").attr('disabled','disabled');
+                $("#mensaje").text("Su descarga ha comenzado, si necesita realizar otra consulta, por favor recargue la pagina");
+                }
+        $(document).keypress(
+          function(event){
+            if (event.which == '13') {
+              event.preventDefault();
+            }
+          });
     </script>
 </head>
 <div id="main">
@@ -161,13 +163,11 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group" id="divBtn">
-                            <div class="col-sm-7"></div>
-                            <div class="col-sm-1">
-                                <a href="{% url 'generarlista' %}">
+                        <div class="form-group" id="divBtn" >
+                            <div class="col-sm-7" ></div>
+                            <div class="col-sm-1" >
                                     <input name="btnConsultar" id="btnConsultar" type="submit" title="Consultar"
-                                        class="btn&#x20;btn-primary" value="Consultar" >
-                                </a>
+                                        class="btn&#x20;btn-primary" value="Consultar" readonly>
                             </div>
                             <div class="col-sm-4"></div>
                         </div>
