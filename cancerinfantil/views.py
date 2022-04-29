@@ -83,76 +83,83 @@ def localidad2(request):
             listaLocalidades = listaLocalidades + "<option value = '" + localidad.loc_resid + "'>" + localidad.loc_resid.upper() + "</option>"
     return HttpResponse(listaLocalidades)
 
-class CSVBuffer:
-    """An object that implements just the write method of the file-like interface.
-    """
+
+def get_headers():
+    return ['id', 'ent_regis', 'mun_regis', 'ent_resid', 'mun_resid', 'tloc_resid', 'loc_resid', 'ent_ocurr',
+            'mun_ocurr', 'tloc_ocurr', 'loc_ocurr', 'causa_def', 'lista_mex', 'sexo', 'edad', 'dia_ocurr', 'mes_ocurr',
+            'anio_ocur', 'dia_regis', 'mes_regis', 'anio_regis', 'dia_nacim', 'mes_nacim', 'anio_nacim', 'ocupacion',
+            'escolarida', 'edo_civil', 'necropsia', 'asist_medi', 'sitio_ocur', 'cond_cert', 'nacionalid', 'derechohab',
+            'embarazo', 'rel_emba', 'horas', 'minutos', 'vio_fami', 'area_ur', 'edad_agru', 'lengua', 'cond_act',
+            'agru_edad', 'edad_abs']
+
+def get_data(data):
+    return {
+        'id': data.id,
+        'ent_regis': data.ent_regis,
+        'mun_regis': data.mun_regis,
+        'ent_resid': data.ent_resid,
+        'mun_resid': data.mun_resid,
+        'tloc_resid': data.tloc_resid,
+        'loc_resid': data.loc_resid,
+        'ent_ocurr': data.ent_ocurr,
+        'mun_ocurr': data.mun_ocurr,
+        'tloc_ocurr': data.tloc_ocurr,
+        'loc_ocurr': data.loc_ocurr,
+        'causa_def': data.causa_def,
+        'lista_mex': data.lista_mex,
+        'sexo': data.sexo,
+        'edad': data.edad,
+        'dia_ocurr': data.dia_ocurr,
+        'mes_ocurr': data.mes_ocurr,
+        'anio_ocur': data.anio_ocur,
+        'dia_regis': data.dia_regis,
+        'mes_regis': data.mes_regis,
+        'anio_regis': data.anio_regis,
+        'dia_nacim': data.dia_nacim,
+        'mes_nacim': data.mes_nacim,
+        'anio_nacim': data.anio_nacim,
+        'ocupacion': data.ocupacion,
+        'escolarida': data.escolarida,
+        'edo_civil': data.edo_civil,
+        'necropsia': data.necropsia,
+        'asist_medi': data.asist_medi,
+        'sitio_ocur': data.sitio_ocur,
+        'cond_cert': data.cond_cert,
+        'nacionalid': data.nacionalid,
+        'derechohab': data.derechohab,
+        'embarazo': data.embarazo,
+        'rel_emba': data.rel_emba,
+        'horas': data.horas,
+        'minutos': data.minutos,
+        'vio_fami': data.vio_fami,
+        'area_ur': data.area_ur,
+        'edad_agru': data.edad_agru,
+        'lengua': data.lengua,
+        'cond_act': data.cond_act,
+        'agru_edad': data.agru_edad,
+        'edad_abs' : data.edad_abs
+    }
+
+# StreamingHttpResponse requires a File-like class that has a 'write' method
+class Echo(object):
     def write(self, value):
-        """Return the string to write."""
         return value
 
-class CSVStream:
-    """Class to stream (download) an iterator to a CSV file."""
-    def export(self, filename, iterator, serializer):
-        # 1. Create our writer object with the pseudo buffer
-        writer = csv.writer(CSVBuffer())
+def iter_items(datas, pseudo_buffer):
+    yield pseudo_buffer.write(codecs.BOM_UTF8)
+    writer = csv.DictWriter(pseudo_buffer, fieldnames=get_headers())
+    yield writer.writeheader()
 
-        # 2. Create the StreamingHttpResponse using our iterator as streaming content
-        response = StreamingHttpResponse((writer.writerow(serializer(data)) for data in iterator),
-                                         content_type="text/csv")
+    for data in datas:
+        yield writer.writerow(get_data(data))
 
-        # 3. Add additional headers to the response
-        response['Content-Disposition'] = f"attachment; filename={filename}.csv"
-        # 4. Return the response
-        return response
-
-def csv_serializer(data):
-    # Format the row to append to the CSV file
-    return [
-        data.id,
-        data.ent_regis,
-        data.mun_regis,
-        data.ent_resid,
-        data.mun_resid,
-        data.tloc_resid,
-        data.loc_resid,
-        data.ent_ocurr,
-        data.mun_ocurr,
-        data.tloc_ocurr,
-        data.loc_ocurr,
-        data.causa_def,
-        data.lista_mex,
-        data.sexo,
-        data.edad,
-        data.dia_ocurr,
-        data.mes_ocurr,
-        data.anio_ocur,
-        data.dia_regis,
-        data.mes_regis,
-        data.anio_regis,
-        data.dia_nacim,
-        data.mes_nacim,
-        data.anio_nacim,
-        data.ocupacion,
-        data.escolarida,
-        data.edo_civil,
-        data.necropsia,
-        data.asist_medi,
-        data.sitio_ocur,
-        data.cond_cert,
-        data.nacionalid,
-        data.derechohab,
-        data.embarazo,
-        data.rel_emba,
-        data.horas,
-        data.minutos,
-        data.vio_fami,
-        data.area_ur,
-        data.edad_agru,
-        data.lengua,
-        data.cond_act,
-        data.agru_edad,
-        data.edad_abs
-    ]
+def get_response(iterator):
+    response = StreamingHttpResponse(
+        streaming_content=(iter_items(iterator, Echo())),
+        content_type='text/csv',
+    )
+    response['Content-Disposition'] = 'attachment;filename=CasosCancer.csv'
+    return response
 
 @csrf_exempt
 def export_csv(request):
@@ -175,13 +182,10 @@ def export_csv(request):
             queryset = queryset.filter(lista_mex=request.POST['frmCancer'])
         if request.POST['frmGenero'] != "TODOS":
             queryset = queryset.filter(sexo=request.POST['frmGenero'])
+
         iterator = queryset.iterator()
 
-        # 2. Create the instance of our CSVStream class
-        csv_stream = CSVStream()
-
-        # 3. Stream (download) the file
-        return csv_stream.export("myfile", iterator, csv_serializer)
+        return get_response(iterator)
 
 
 # Generacion de la vista inicial de la pagina de Mapas, genera el mapa sin casos, al hacer un POST toma los datos para hacer filtros

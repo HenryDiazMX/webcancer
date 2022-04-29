@@ -14,6 +14,7 @@ def home(request):
 
 
 def contacto(request):
+    div = ""
     if request.method == "POST":
         nombre = request.POST.get("Nombre", None)
         apellidop = request.POST.get("ApellidoP", None)
@@ -36,8 +37,9 @@ def contacto(request):
             'mensaje': mensaje
         }
         send_email(context)
+        div = "Su mensaje ha sido enviado"
 
-    return render(request, "home/contacto.html")
+    return render(request, "home/contacto.html", {"div": div})
 
 
 def send_email(context):
