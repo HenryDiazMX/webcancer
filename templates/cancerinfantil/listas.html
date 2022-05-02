@@ -18,7 +18,7 @@
         });
         function bloquearBtn(){
                 $("#btnConsultar").attr('disabled','disabled');
-                $("#mensaje").text("Su descarga ha comenzado, si necesita realizar otra consulta, por favor recargue la pagina");
+                $("#mensajeSucess").show();
                 }
         $(document).keypress(
           function(event){
@@ -28,168 +28,165 @@
           });
     </script>
 </head>
-<div id="main">
-    <!-- Title, Breadcrumb Start-->
-    <div class="breadcrumb-wrapper">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
-                    <h2 class="title">Listas</h2>
-                </div>
-                <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
-                    <div class="breadcrumbs pull-right">
-                        <ul>
-                            <li></li>
-                            <li><a href="{% url 'home' %}">Inicio</a></li>
-                            <li>Cáncer Infantil</li>
-                            <li>Listas</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Title, Breadcrumb End-->
-    <!-- Main Content start-->
-    <form method="post" name="frmConsultarListas" class="form-horizontal" action="{% url 'generarlista' %}"
-        id="frmConsultarListas" > {% csrf_token %}
-        <div id="content">
-            <div id="content" class="container">
+    <div id="main">
+        <!-- Title, Breadcrumb Start-->
+        <div class="breadcrumb-wrapper">
+            <div class="container">
                 <div class="row">
-                    <div class="col-md-2"></div>
-                    <div class='col-md-6'>
-                        <h1>Consultar</h1>
-                        <div class="form-group">
-                            <div class="col-sm-6 control-label">
-                                <label for="frmEstado">Estado:</label>
-                            </div>
-                            <div class="col-sm-6">
-                                 <select name="frmEstado" id="frmEstado" class="form-control" >
-                                    <option value="TODOS">TODOS</option>
-                                    {% for estados in estados %}
-                                    <option value="{{ estados.ent_resid}}" >{{ estados.ent_resid.upper}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-6 control-label">
-                                <label for="frmMunicipio">Municipio:</label>
-                            </div>
-                            <div class="col-sm-6">
-                                <select name="frmMunicipio" id="frmMunicipio" class="form-control" disabled >
-                                    <option value="TODOS">TODOS</option>
-                                    {% for municipios in municipios %}
-                                    <option value='{{ municipios.mun_resid}}' >{{ municipios.mun_resid.upper}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-6 control-label">
-                                <label for="frmLocalidad">Localidad:</label>
-                            </div>
-                            <div class="col-sm-6">
-                                <select name="frmLocalidad" class="form-control" id="frmLocalidad" disabled >
-                                    <option value="TODOS">TODOS</option>
-                                    {% for localidades in municipio %}
-                                    <option value='{{ localidades.loc_resid}}'>{{ localidades.loc_resid.upper}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-6 control-label">
-                                <label for="frmRangoEdad">Rango de Edades:</label>
-                            </div>
-                            <div class="col-sm-6">
-                                <select name="frmRangoEdad" class="form-control" id="frmRangoEdad" >
-                                    <option value="TODOS">TODOS</option>
-                                    {% for agruedad in agruedad %}
-                                    <option value="{{ agruedad.agru_edad}}">{{ agruedad.agru_edad.upper}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group ">
-                            <div class="col-sm-6 control-label">
-                                <label for="frmRegistro">Año de registro:</label>
-                            </div>
-                            <div class="col-sm-6">
-                                <select name="frmRegistro" class="form-control" id="frmRegistro">
-                                    <option value="TODOS">TODOS</option>
-                                    {% for años in años %}
-                                    <option value='{{ años.anio_regis}}'>{{ años.anio_regis}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group ">
-                            <div class="col-sm-6 control-label">
-                                <label for="frmCancer">Tipo de Cancer:</label>
-                            </div>
-                            <div class="col-sm-6">
-                                <select name="frmCancer" class="form-control" id="frmCancer">
-                                    <option value="TODOS">TODOS</option>
-                                    {% for tipoCancer in cancer %}
-                                    <option value="{{ tipoCancer.lista_mex}}">{{ tipoCancer.lista_mex.upper}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group contratistas servicios">
-                            <div class="col-sm-6 control-label">
-                                <label for="frmGenero">Sexo:</label>
-                            </div>
-                            <div class="col-sm-6">
-                                <select name="frmGenero" class="form-control" id="frmGenero">
-                                    <option value="TODOS">TODOS</option>
-                                    {% for genero in genero %}
-                                    <option value="{{ genero.sexo}}" >{{ genero.sexo.upper}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-6 control-label">
-                                <label for="frmFormato">Formato:</label>
-                            </div>
-                            <div class="col-sm-6">
-                                <select name="frmFormato" id="frmFormato" class="form-control" disabled>
-                                    <option value="CSV" SELECTED>CSV</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group" id="divBtn" >
-                            <div class="col-sm-7" ></div>
-                            <div class="col-sm-1" >
-                                    <input name="btnConsultar" id="btnConsultar" type="submit" title="Consultar"
-                                        class="btn&#x20;btn-primary" value="Consultar" readonly>
-                            </div>
-                            <div class="col-sm-4"></div>
-                        </div>
-                        <div class="col-sm-7 text-center">
-                            <div class=" alert-success alert">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
-                           Su descarga ha comenzado, si necesita realizar otra consulta, por favor recargue la pagina.
-                        </div>
-                </div>
+                    <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+                        <h2 class="title">Listas</h2>
                     </div>
-                <div class="col-sm-12 text-center">
-                    <h4 id="mensaje">  </h4>
+                    <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+                        <div class="breadcrumbs pull-right">
+                            <ul>
+                                <li></li>
+                                <li><a href="{% url 'home' %}">Inicio</a></li>
+                                <li>Cáncer Infantil</li>
+                                <li>Listas</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-sm-12 text-center" id = "divesconder" >
-                    <h4> {{ div }} </h4>
             </div>
         </div>
-    </form>
-</div>
-    <div>
+        <!-- Title, Breadcrumb End-->
+        <!-- Main Content start-->
+        <form method="post" name="frmConsultarListas" class="form-horizontal" action="{% url 'generarlista' %}"
+              id="frmConsultarListas"> {% csrf_token %}
+            <div id="content">
+                <div id="content" class="container">
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class='col-md-6'>
+                            <h1>Consultar</h1>
+                            <div class="form-group">
+                                <div class="col-sm-6 control-label">
+                                    <label for="frmEstado">Estado:</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select name="frmEstado" id="frmEstado" class="form-control">
+                                        <option value="TODOS">TODOS</option>
+                                        {% for estados in estados %}
+                                            <option value="{{ estados.ent_resid }}">{{ estados.ent_resid.upper }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6 control-label">
+                                    <label for="frmMunicipio">Municipio:</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select name="frmMunicipio" id="frmMunicipio" class="form-control" disabled>
+                                        <option value="TODOS">TODOS</option>
+                                        {% for municipios in municipios %}
+                                            <option value='{{ municipios.mun_resid }}'>{{ municipios.mun_resid.upper }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6 control-label">
+                                    <label for="frmLocalidad">Localidad:</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select name="frmLocalidad" class="form-control" id="frmLocalidad" disabled>
+                                        <option value="TODOS">TODOS</option>
+                                        {% for localidades in municipio %}
+                                            <option value='{{ localidades.loc_resid }}'>{{ localidades.loc_resid.upper }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6 control-label">
+                                    <label for="frmRangoEdad">Rango de Edades:</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select name="frmRangoEdad" class="form-control" id="frmRangoEdad">
+                                        <option value="TODOS">TODOS</option>
+                                        {% for agruedad in agruedad %}
+                                            <option value="{{ agruedad.agru_edad }}">{{ agruedad.agru_edad.upper }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
 
+                            <div class="form-group ">
+                                <div class="col-sm-6 control-label">
+                                    <label for="frmRegistro">Año de registro:</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select name="frmRegistro" class="form-control" id="frmRegistro">
+                                        <option value="TODOS">TODOS</option>
+                                        {% for años in años %}
+                                            <option value='{{ años.anio_regis }}'>{{ años.anio_regis }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group ">
+                                <div class="col-sm-6 control-label">
+                                    <label for="frmCancer">Tipo de Cancer:</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select name="frmCancer" class="form-control" id="frmCancer">
+                                        <option value="TODOS">TODOS</option>
+                                        {% for tipoCancer in cancer %}
+                                            <option value="{{ tipoCancer.lista_mex }}">{{ tipoCancer.lista_mex.upper }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group contratistas servicios">
+                                <div class="col-sm-6 control-label">
+                                    <label for="frmGenero">Sexo:</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select name="frmGenero" class="form-control" id="frmGenero">
+                                        <option value="TODOS">TODOS</option>
+                                        {% for genero in genero %}
+                                            <option value="{{ genero.sexo }}">{{ genero.sexo.upper }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6 control-label">
+                                    <label for="frmFormato">Formato:</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select name="frmFormato" id="frmFormato" class="form-control" disabled>
+                                        <option value="CSV" SELECTED>CSV</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group" id="divBtn">
+                                <div class="col-sm-7"></div>
+                                <div class="col-sm-1">
+                                    <input name="btnConsultar" id="btnConsultar" type="submit" title="Descargar"
+                                           class="btn&#x20;btn-primary" value="Consultar" readonly>
+                                </div>
+                            </div>
+                            <div class="container" id="mensajeSucess" style="display:none">
+                                <div class="col-sm-2"></div>
+                                    <div class="col-sm-4 alert-success alert text-center" >
+                                        <button type="button" class="close" data-dismiss="alert">×</button>
+                                        Su descarga ha comenzado.
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 text-center" id="divesconder">
+                            <h4> {{ div }} </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
+
 <!-- Main Content end-->
 <!-- Content End -->
 {% endblock %}
