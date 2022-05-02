@@ -1,3 +1,5 @@
+import time
+
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.http import BadHeaderError
 from django.shortcuts import render, HttpResponse
@@ -14,13 +16,12 @@ def home(request):
 
 
 def contacto(request):
-    div = ""
     if request.method == "POST":
-        nombre = request.POST.get("Nombre", None)
-        apellidop = request.POST.get("ApellidoP", None)
-        apellidom = request.POST.get("ApellidoM", None)
-        correo = request.POST.get("Correo", None)
-        mensaje = request.POST.get("Mensaje", None)
+        nombre = request.POST.get("nombre", None)
+        apellidop = request.POST.get("apellidoP", None)
+        apellidom = request.POST.get("apellidoM", None)
+        correo = request.POST.get("correo", None)
+        mensaje = request.POST.get("mensaje", None)
 
         models.registro.objects.create(
             nombre=nombre,
@@ -32,14 +33,14 @@ def contacto(request):
         context = {
             'nombre': nombre,
             'apellidop': apellidop,
+            'apellidop': apellidop,
             'apellidom': apellidom,
             'correo': correo,
             'mensaje': mensaje
         }
-        send_email(context)
-        div = "Su mensaje ha sido enviado"
-
-    return render(request, "home/contacto.html", {"div": div})
+        # send_email(context)
+        time.sleep(3)
+    return render(request, "home/contacto.html")
 
 
 def send_email(context):
@@ -55,4 +56,3 @@ def send_email(context):
 
     email.attach_alternative(content, 'text/html')
     email.send()
-

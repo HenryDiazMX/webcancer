@@ -2,90 +2,114 @@
 {% load static %}
 {% block title %} Contacto | Ciencia De Datos{% endblock %}
 {% block content %}
-<div id="main">
-    <div class="breadcrumb-wrapper">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
-                    <h2 class="title">Contacto</h2>
-                </div>
-                <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
-                    <div class="breadcrumbs pull-right">
-                        <ul>
-                            <li></li>
-                            <li><a href="{% url 'home' %}">Inicio</a></li>
-                            <li><a href="#">Contacto</a></li>
-                        </ul>
+    <head>
+        <script type="text/javascript">
+            function Validate(f) {
+                var isValid = true;
+                // do validation stuff
+                if (isValid) {
+                    f.btnEnviar.disabled = true;
+                    document.getElementById("mensajeSucess").style.display = "block";
+                }
+                return isValid;
+}
+
+        </script>
+    </head>
+    <div id="main">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+                        <h2 class="title">Contacto</h2>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+                        <div class="breadcrumbs pull-right">
+                            <ul>
+                                <li></li>
+                                <li><a href="{% url 'home' %}">Inicio</a></li>
+                                <li><a href="#">Contacto</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Title, Breadcrumb End-->
-    <form method="post" name="frmContacto" class="form-horizontal"
-          action="{% url 'contacto' %}" id="frmContacto">{% csrf_token %}
-        <div id="content" class="container">
-            <div class="row">
-                <div class="col-md-2"></div>
-                <div class='col-md-6'>
-                    <h2>Déjanos un mensaje:</h2>
-                    <div class="form-group">
-                        <div class="col-sm-6 control-label">
-                            <label for="Nombre">Nombre:</label></div>
-                        <div class="col-sm-6">
-                            <input type="text" name="Nombre" id="Nombre" class="form-control"
-                                   placeholder="Escriba su Nombre" required >
+        <!-- Title, Breadcrumb End-->
+        <form method="post" name="frmContacto" class="form-horizontal"
+              action="{% url 'contacto' %}" id="frmContacto" onsubmit="return Validate(this);" >{% csrf_token %}
+            <div id="content" class="container">
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class='col-md-6'>
+                        <h2>Déjanos un mensaje:</h2>
+                        <div class="form-group">
+                            <div class="col-sm-6 control-label">
+                                <label for="nombre">Nombre:</label></div>
+                            <div class="col-sm-6">
+                                <input type="text" name="nombre" id="nombre" class="form-control"
+                                       placeholder="Escriba su Nombre" required>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <div class="col-sm-6 control-label">
-                            <label for="ApellidoP">Apellido Paterno:</label></div>
-                        <div class="col-sm-6">
-                            <input type="text" name="ApellidoP" id="ApellidoP" class="form-control"
-                                   placeholder="Escriba su Apellido Paterno" required>
+                        <div class="form-group">
+                            <div class="col-sm-6 control-label">
+                                <label for="apellidoP">Apellido Paterno:</label></div>
+                            <div class="col-sm-6">
+                                <input type="text" name="apellidoP" id="apellidoP" class="form-control"
+                                       placeholder="Escriba su Apellido Paterno" required>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <div class="col-sm-6 control-label">
-                            <label for="ApellidoM">Apellido Materno:</label></div>
-                        <div class="col-sm-6">
-                            <input type="text" name="ApellidoM" id="ApellidoM" class="form-control"
-                                   placeholder="Escriba su Apellido Materno" required>
+                        <div class="form-group">
+                            <div class="col-sm-6 control-label">
+                                <label for="apellidoM">Apellido Materno:</label></div>
+                            <div class="col-sm-6">
+                                <input type="text" name="apellidoM" id="apellidoM" class="form-control"
+                                       placeholder="Escriba su Apellido Materno" required>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <div class="col-sm-6 control-label">
-                            <label for="Correo">Correo Electronico:</label></div>
-                        <div class="col-sm-6">
-                            <input type="email" name="Correo" id="Correo" class="form-control"
-                                   placeholder="Escriba su Correo Electronico" required>
+                        <div class="form-group">
+                            <div class="col-sm-6 control-label">
+                                <label for="correo">Correo Electronico:</label></div>
+                            <div class="col-sm-6">
+                                <input type="email" name="correo" id="correo" class="form-control"
+                                       placeholder="Escriba su Correo Electronico" required>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <div class="col-sm-6 control-label">
-                            <label for="Mensaje">Mensaje:</label></div>
-                        <div class="col-sm-6">
-                            <textarea name="Mensaje" id="Mensaje" class="form-control" placeholder="Escriba su Mensaje"
+                        <div class="form-group">
+                            <div class="col-sm-6 control-label">
+                                <label for="mensaje">Mensaje:</label></div>
+                            <div class="col-sm-6">
+                            <textarea name="mensaje" id="mensaje" class="form-control" placeholder="Escriba su Mensaje"
                                       rows="8" maxlength="1000" required></textarea>
+                            </div>
                         </div>
-                    </div>
+                        <div class="form-group" id="divBtn">
+                            <div class="col-sm-7"></div>
+                            <div class="col-sm-1">
+                                <input name="btnEnviar" id="btnEnviar" title="Enviar" type="submit"
+                                       class="btn&#x20;btn-primary" value="Enviar" readonly >
+                            </div>
+                        </div>
+                        <div class="container" id="mensajeSucess" style="display:none" >
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-4 alert-success alert text-center">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                Su mensaje ha sido enviado.
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        <div class="col-sm-7"></div>
-                        <div class="col-sm-1">
-                            <a href="#">
-                                <input name="btnEnviar" id="btnEnviar" type="submit" title="Enviar"
-                                       class="btn&#x20;btn-primary" value="Enviar"> </a>
-                        </div>
-                        <div class="col-sm-4"></div>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
+    <script>
+        if ( window.history.replaceState ) {
+          window.history.replaceState( null, null, window.location.href );
+        }
+    </script>
 {% endblock %}
