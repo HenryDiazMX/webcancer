@@ -48,9 +48,13 @@
                             <select class="form form-control" name="frmEstado"
                                     id="frmEstado">
                                     <option value="TODOS">TODOS</option>
-                                {% for estados in republica %}
-                                    <option value="{{ estados.ent_resid}}" >{{ estados.ent_resid.upper}}</option>
-                                {% endfor %}
+                                    {% if defaultEstado != "" %}
+                                        <option value="{{ defaultEstado}}" selected hidden>{{ defaultEstado.upper}}</option>
+                                    {% endif %}
+                                    {% for estados in republica %}
+                                        <option value="{{ estados.ent_resid}}">{{ estados.ent_resid.upper}}</option>
+                                    {% endfor %}
+
                             </select>
                         </div>
                     </div>
@@ -61,11 +65,12 @@
                         <div>
                             <select class="form form-control" name="frmTipo"
                                     id="frmTipo">
-                                <option selected value="DOMINANTE">CANCER DOMINANTES</option>
-                                <option value="OCURRENCIA">SITIO DE OCURRENCIA</option>
-                                <option value="AREA">TIPO DE ÁREA</option>
-                                <option value="GENERO">GENERO</option>
-                                <option value="EDAD">EDAD</option>
+                                {% if defaultRango != "" %}
+                                        <option value="{{ defaultTipo}}" selected hidden>{{ defaultTipo.upper}}</option>
+                                {% endif %}
+                                {% for tipos in tipoGrafica %}
+                                            <option value="{{ tipos }}">{{ tipos.upper}}</option>
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
@@ -74,12 +79,15 @@
                             <label>Año:</label>
                         </div>
                         <div>
-                            <select class="form form-control" name="frmAño"
-                                    id="frmAño">
-                                <option selected value="TODOS">TODOS</option>
-                                {% for años in año %}
-                                    <option >{{ años.anio_regis}}</option>
-                                {% endfor %}
+                            <select class="form form-control" name="frmAnio"
+                                    id="frmAnio">
+                                    <option value="TODOS">TODOS</option>
+                                    {% if defaultAnio != "" %}
+                                        <option value="{{ defaultAnio}}" selected hidden>{{ defaultAnio}}</option>
+                                    {% endif %}
+                                    {% for anio in anio %}
+                                        <option value="{{ anio.anio_regis}}" >{{ anio.anio_regis}}</option>
+                                    {% endfor %}
                             </select>
                         </div>
                     </div>
@@ -91,6 +99,9 @@
                             <select class="form form-control" name="frmRangoEdad"
                                     id="frmRangoEdad" required>
                                 <option disabled value="" selected hidden>SELLECIONE UN RANGO</option>
+                                {% if defaultRango != "" %}
+                                        <option value="{{ defaultRango}}" selected hidden>{{ defaultRango.upper}}</option>
+                                {% endif %}
                                 {% for agruedad in agruedad %}
                                     <option value="{{ agruedad.agru_edad}}">{{ agruedad.agru_edad.upper}}</option>
                                 {% endfor %}

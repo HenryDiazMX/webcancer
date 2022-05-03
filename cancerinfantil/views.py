@@ -432,26 +432,35 @@ def mapascancer(request):
 @csrf_exempt
 def graficascancer(request):
     global fig1
-    datos = Casostotalrepublica.objects.all().values('id','ent_resid','lista_mex','sexo','edad','anio_regis','sitio_ocur','area_ur','agru_edad')
-    df = None
+    datos = Casostotalrepublica.objects.all().values('id','ent_resid','lista_mex','sexo','edad_abs','anio_regis','sitio_ocur','area_ur','agru_edad')
     estados = Casostotalrepublica.objects.distinct('ent_resid')
     anios = Casostotalrepublica.objects.distinct('anio_regis')
     agruedad = Casostotalrepublica.objects.distinct('agru_edad')
+    df = None
+    tipoGrafica = ['CANCER DOMINANTES','SITIO DE OCURRENCIA', 'TIPO DE ÁREA', 'GENERO', 'EDAD']
     fig = ""
     texto = ""
     div = ""
+    defaultEstado = ""
+    defaultTipo = ""
+    defaultAnio = ""
+    defaultRango = ""
     try:
         if request.method == 'POST':
             if request.POST['frmEstado'] != "TODOS":
                 datos = datos.filter(ent_resid=request.POST['frmEstado'])
-            if request.POST['frmAño'] != "TODOS":
-                datos = datos.filter(anio_regis=request.POST['frmAño'])
+                defaultEstado = request.POST['frmEstado']
+            if request.POST['frmAnio'] != "TODOS":
+                datos = datos.filter(anio_regis=request.POST['frmAnio'])
+                defaultAnio = request.POST['frmAnio']
             if request.POST['frmRangoEdad'] != "TODOS":
                 datos = datos.filter(agru_edad=request.POST['frmRangoEdad'])
+                defaultRango = request.POST['frmRangoEdad']
 
             df = pd.DataFrame(datos)
 
-            if request.POST['frmTipo'] == "DOMINANTE":
+            if request.POST['frmTipo'] == "CANCER DOMINANTES":
+                defaultTipo = request.POST['frmTipo']
                 datos2 = (df[['anio_regis', 'lista_mex']])
                 value_counts = datos2.value_counts()
                 df_val_counts = pd.DataFrame(value_counts)
@@ -463,6 +472,7 @@ def graficascancer(request):
                                    legend_itemsizing="constant")
                 texto = "Gráfica de los tipos de Cáncer Dominantes"
             if request.POST['frmTipo'] == "GENERO":
+                defaultTipo = request.POST['frmTipo']
                 datos2 = (df[['anio_regis', 'sexo']])
                 value_counts = datos2.value_counts()
                 df_val_counts = pd.DataFrame(value_counts)
@@ -470,7 +480,8 @@ def graficascancer(request):
                 datos3.columns = ['AÑO', 'SEXO', 'CONTEO']  # change column names
                 fig1 = px.bar(datos3, x="AÑO", y="CONTEO", color="SEXO", height=700)
                 texto = "Gráficas por Año de Registro y Genero"
-            if request.POST['frmTipo'] == "OCURRENCIA":
+            if request.POST['frmTipo'] == "SITIO DE OCURRENCIA":
+                defaultTipo = request.POST['frmTipo']
                 datos2 = (df[['sitio_ocur']])
                 value_counts = datos2.value_counts()
                 df_val_counts = pd.DataFrame(value_counts)
@@ -481,7 +492,8 @@ def graficascancer(request):
                 fig1.update_traces(textposition='outside')
                 fig1.update_layout(uniformtext_minsize=1, uniformtext_mode='hide', showlegend=False)
                 texto = "Lugares de Ocurrencia"
-            if request.POST['frmTipo'] == "AREA":
+            if request.POST['frmTipo'] == "TIPO DE ÁREA":
+                defaultTipo = request.POST['frmTipo']
                 datos2 = (df[['anio_regis', 'area_ur']])
                 value_counts = datos2.value_counts()
                 df_val_counts = pd.DataFrame(value_counts)
@@ -490,6 +502,7 @@ def graficascancer(request):
                 fig1 = px.bar(datos3, x="AÑO", y="CONTEO", color="TIPO DE AREA", height=700)
                 texto = "Tipo de Área donde Residía el Niño(a)"
             if request.POST['frmTipo'] == "EDAD":
+                defaultTipo = request.POST['frmTipo']
                 datos2 = (df[['edad_abs']])
                 value_counts = datos2.value_counts()
                 df_val_counts = pd.DataFrame(value_counts)
@@ -505,7 +518,8 @@ def graficascancer(request):
         div = "Su consulta no tiene casos para mostrar, realice otra consulta"
 
     return render(request, "cancerinfantil/graficas.html",
-                {"fig": fig, "texto": texto, "republica": estados, "año": anios, "agruedad": agruedad,
-                "df": df, "div": div})
+                {"fig": fig, "texto": texto, "republica": estados, "anio": anios, "agruedad": agruedad,
+                "df": df, "div": div, "defaultEstado": defaultEstado, "tipoGrafica": tipoGrafica, "defaultTipo": defaultTipo,
+                "defaultAnio": defaultAnio, "defaultRango": defaultRango})
 
 
