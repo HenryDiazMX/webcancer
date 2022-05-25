@@ -1,14 +1,11 @@
 import codecs
 import csv
-import time
 import pandas as pd
 import folium
 import plotly.express as px
 import simplekml as simplekml
 from django.shortcuts import render
 from django.http import HttpResponse, StreamingHttpResponse
-
-from webcancer import settings
 from .models import *
 from django.views.decorators.csrf import csrf_exempt
 
@@ -137,7 +134,7 @@ def get_data(data):
         'lengua': data.lengua,
         'cond_act': data.cond_act,
         'agru_edad': data.agru_edad,
-        'edad_abs' : data.edad_abs
+        'edad_abs': data.edad_abs
     }
 
 # StreamingHttpResponse requires a File-like class that has a 'write' method
@@ -414,7 +411,7 @@ def mapascancer(request):
         'map': map,
         "republica": estados, "estado": municipios, "municipio": localidades, "año": anios,
         "cancer": tipoCancer, "genero": genero, "agruedad": agruedad,
-        "div": div,
+        "div": div, 
     }
     try:
         if 'bntConsultar' in request.POST:
@@ -432,12 +429,15 @@ def mapascancer(request):
 @csrf_exempt
 def graficascancer(request):
     global fig1
-    datos = Casostotalrepublica.objects.all().values('id','ent_resid','lista_mex','sexo','edad_abs','anio_regis','sitio_ocur','area_ur','agru_edad')
+    datos = Casostotalrepublica.objects.all().values('id', 'ent_resid', 'lista_mex', 'sexo', 'edad_abs', 'anio_regis',
+                                                     'sitio_ocur', 'area_ur', 'agru_edad')
     estados = Casostotalrepublica.objects.distinct('ent_resid')
     anios = Casostotalrepublica.objects.distinct('anio_regis')
     agruedad = Casostotalrepublica.objects.distinct('agru_edad')
+    sexo = Casostotalrepublica.objects.distinct('sexo')
+    cancer = Casostotalrepublica.objects.distinct('lista_mex')
     df = None
-    tipoGrafica = ['CANCER DOMINANTES','SITIO DE OCURRENCIA', 'TIPO DE ÁREA', 'GENERO', 'EDAD']
+    tipoGrafica = ['CÁNCER DOMINANTES', 'SITIO DE OCURRENCIA', 'TIPO DE ÁREA', 'GENERO', 'EDAD']
     fig = ""
     texto = ""
     div = ""
@@ -445,6 +445,8 @@ def graficascancer(request):
     defaultTipo = ""
     defaultAnio = ""
     defaultRango = ""
+    defaultSexo = ""
+    defaultCancer = ""
     try:
         if request.method == 'POST':
             if request.POST['frmEstado'] != "TODOS":
@@ -456,10 +458,18 @@ def graficascancer(request):
             if request.POST['frmRangoEdad'] != "TODOS":
                 datos = datos.filter(agru_edad=request.POST['frmRangoEdad'])
                 defaultRango = request.POST['frmRangoEdad']
+            else:
+                defaultRango = request.POST['frmRangoEdad']
+            if request.POST['frmSexo'] != "TODOS":
+                datos = datos.filter(sexo = request.POST['frmSexo'])
+                defaultSexo = request.POST['frmSexo']
+            if request.POST['frmCancer'] != "TODOS":
+                datos = datos.filter(lista_mex = request.POST['frmCancer'])
+                defaultCancer = request.POST['frmCancer']
 
             df = pd.DataFrame(datos)
 
-            if request.POST['frmTipo'] == "CANCER DOMINANTES":
+            if request.POST['frmTipo'] == "CÁNCER DOMINANTES":
                 defaultTipo = request.POST['frmTipo']
                 datos2 = (df[['anio_regis', 'lista_mex']])
                 value_counts = datos2.value_counts()
@@ -518,8 +528,7 @@ def graficascancer(request):
         div = "Su consulta no tiene casos para mostrar, realice otra consulta"
 
     return render(request, "cancerinfantil/graficas.html",
-                {"fig": fig, "texto": texto, "republica": estados, "anio": anios, "agruedad": agruedad,
-                "df": df, "div": div, "defaultEstado": defaultEstado, "tipoGrafica": tipoGrafica, "defaultTipo": defaultTipo,
-                "defaultAnio": defaultAnio, "defaultRango": defaultRango})
-
-
+                  {"fig": fig, "texto": texto, "republica": estados, "anio": anios, "agruedad": agruedad,
+                   "df": df, "div": div, "defaultEstado": defaultEstado, "tipoGrafica": tipoGrafica, "sexo": sexo,
+                   "cancer": cancer, "defaultTipo": defaultTipo, "defaultAnio": defaultAnio,
+                   "defaultRango": defaultRango, "defaultSexo": defaultSexo, "defaultCancer": defaultCancer })

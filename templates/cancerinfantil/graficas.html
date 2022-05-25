@@ -8,6 +8,25 @@
       document.getElementById("divesconder").style.visibility = "hidden";
     }
     setTimeout("showDiv1()", 10000); // after 15 sec
+
+    $(document).ready(function () {
+        $("#frmCancer").change(function () {
+            if ($("#frmCancer").val() !== "TODOS"){
+                {% comment %}var x = document.getElementById("frmRangoEdad");
+                var option = new Option("TODOS");
+                x.appendChild(option);{% endcomment %}
+                document.getElementById("optionTodosRango").style.display = "block";
+            }
+            else{
+                document.getElementById("optionTodosRango").style.display = "none";
+                document.getElementById("frmRangoEdad").selectedIndex = "0";
+            }
+        });
+        if($("#frmCancer").val() === "TODOS"){
+            document.getElementById("optionTodosRango").visibility = "hidden";
+        }
+
+    });
     </script>
     </head>
     <!-- Content Start -->
@@ -40,6 +59,39 @@
             <h2>Consultar:</h2>
             <div class="row">
                 <div class="col-sm-12">
+                    <div class="col-sm-3" id="divTipo">
+                        <div>
+                            <label>Tipo de Cáncer:</label>
+                        </div>
+                        <div>
+                            <select class="form form-control" name="frmCancer"
+                                    id="frmCancer" required >
+                                <option value="TODOS" selected>TODOS</option>
+                                {% if defaultCancer != "" %}
+                                        <option value="{{ defaultCancer }}" selected hidden>{{ defaultCancer.upper}}</option>
+                                {% endif %}
+                                {% for cancer in cancer %}
+                                    <option value="{{ cancer.lista_mex }}">{{ cancer.lista_mex.upper }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div>
+                            <label>Tipo de Grafica:</label>
+                        </div>
+                        <div>
+                            <select class="form form-control" name="frmTipo"
+                                    id="frmTipo">
+                                {% if defaultTipo != "" %}
+                                        <option value="{{ defaultTipo}}" selected hidden>{{ defaultTipo.upper}}</option>
+                                {% endif %}
+                                {% for tipos in tipoGrafica %}
+                                            <option value="{{ tipos }}">{{ tipos.upper}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
                     <div class="col-sm-3">
                         <div>
                             <label>Estado:</label>
@@ -60,23 +112,7 @@
                     </div>
                     <div class="col-sm-3">
                         <div>
-                            <label>Tipo de Grafica:</label>
-                        </div>
-                        <div>
-                            <select class="form form-control" name="frmTipo"
-                                    id="frmTipo">
-                                {% if defaultRango != "" %}
-                                        <option value="{{ defaultTipo}}" selected hidden>{{ defaultTipo.upper}}</option>
-                                {% endif %}
-                                {% for tipos in tipoGrafica %}
-                                            <option value="{{ tipos }}">{{ tipos.upper}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div>
-                            <label>Año:</label>
+                            <label>Año de Registro:</label>
                         </div>
                         <div>
                             <select class="form form-control" name="frmAnio"
@@ -98,12 +134,30 @@
                         <div>
                             <select class="form form-control" name="frmRangoEdad"
                                     id="frmRangoEdad" required>
-                                <option disabled value="" selected hidden>SELLECIONE UN RANGO</option>
+                                <option disabled value="" selected hidden>SELECCIONE UN RANGO</option>
+                                <option id="optionTodosRango" value="TODOS">TODOS</option>
                                 {% if defaultRango != "" %}
                                         <option value="{{ defaultRango}}" selected hidden>{{ defaultRango.upper}}</option>
                                 {% endif %}
                                 {% for agruedad in agruedad %}
                                     <option value="{{ agruedad.agru_edad}}">{{ agruedad.agru_edad.upper}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div>
+                            <label>Género:</label>
+                        </div>
+                        <div>
+                            <select class="form form-control" name="frmSexo"
+                                    id="frmSexo" required>
+                                <option value="TODOS" selected>TODOS</option>
+                                {% if defaultSexo != "" %}
+                                        <option value="{{ defaultSexo}}" selected hidden>{{ defaultSexo.upper}}</option>
+                                {% endif %}
+                                {% for sexo in sexo %}
+                                    <option value="{{ sexo.sexo }}">{{ sexo.sexo.upper }}</option>
                                 {% endfor %}
                             </select>
                         </div>
